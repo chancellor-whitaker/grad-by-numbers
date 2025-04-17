@@ -1,7 +1,9 @@
 import { isStringNumeric } from "./isStringNumeric";
 import { sumArray } from "./sumArray";
 
-export const getVizData = (data) => {
+// include min & max
+
+export const summarizeData = (data) => {
   const rows = [data].filter((element) => element).flat();
 
   const object = {};
@@ -46,6 +48,16 @@ export const getVizData = (data) => {
               { ratio: count / sum, count },
             ])
           ),
+          min: !isNumeric
+            ? null
+            : Math.min(
+                ...Object.entries(values).map(([value]) => Number(value))
+              ),
+          max: !isNumeric
+            ? null
+            : Math.max(
+                ...Object.entries(values).map(([value]) => Number(value))
+              ),
           isNumeric,
           distinct,
           sum,
