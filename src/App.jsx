@@ -1,21 +1,11 @@
+import { SimpleBarChart } from "./components/SimpleBarChart";
+import { SimplePieChart } from "./components/SimplePieChart";
 import { summarizeData } from "./utils/summarizeData";
+import { Container } from "./components/Container";
 import { usePromise } from "./hooks/usePromise";
-import { roundToTwo } from "./utils/roundToTwo";
+import { getVizData } from "./utils/getVizData";
+import { Section } from "./components/Section";
 import { promise } from "./utils/promise";
-
-const getChartData = (summary, field, ratio) => {
-  const valueKey = ratio ? "ratio" : "count";
-
-  const object = summary[field]?.values ? summary[field]?.values : {};
-
-  return Object.entries(object)
-    .map(([name, { [valueKey]: value }]) => ({
-      value,
-      name,
-    }))
-    .filter(({ name }) => name)
-    .sort(({ value: a }, { value: b }) => b - a);
-};
 
 export default function App() {
   const data = usePromise(promise);
@@ -37,56 +27,62 @@ export default function App() {
   // organize visualization into recharts datasets as described above
   // handle managing filter state & maintaining both unfiltered viz data & filtered viz data
 
-  console.log(summary);
+  const vizData = getVizData(summary);
 
-  const visualization = {
-    age: {
-      average: Math.floor(summary["Age"]?.average),
-      max: Math.floor(summary["Age"]?.max),
-      min: Math.floor(summary["Age"]?.min),
-    },
-    state: {
-      amount: getChartData(summary, "STATENAME").length,
-      data: getChartData(summary, "STATENAME"),
-      chart: "bar",
-    },
-    county: {
-      amount: getChartData(summary, "COUNTYNM").length,
-      data: getChartData(summary, "COUNTYNM"),
-      chart: "bar",
-    },
-    pellRecipient: {
-      amount: getChartData(summary, "EKU_Low_Inc").find(
-        ({ name }) => name === "Y"
-      )?.value,
-    },
-    award: {
-      data: getChartData(summary, "acat_desc"),
-      amount: summary["acat_desc"]?.sum,
-      chart: "bar",
-    },
-    serviceRegion: {
-      data: getChartData(summary, "EKU_Service_Region"),
-      chart: "pie",
-    },
-    level: {
-      data: getChartData(summary, "SHRDGMR_LEVL_CODE", true),
-      chart: "pie",
-    },
-    firstGeneration: {
-      data: getChartData(summary, "FirstGenInd"),
-      chart: "pie",
-    },
-    gpa: { average: roundToTwo(summary["Overall_GPA_End_of_Term"]?.average) },
-    major: { data: getChartData(summary, "major_desc"), chart: "bar" },
-    country: { amount: getChartData(summary, "country").length },
+  console.log(vizData);
+
+  const generateBarChartSection = (key) => {
+    return (
+      <Section>
+        {vizData[key].title}
+        <div className="overflow-y-scroll" style={{ height: 300 }}>
+          <SimpleBarChart data={vizData[key].data}></SimpleBarChart>
+        </div>
+      </Section>
+    );
   };
 
-  console.log(visualization);
+  const generatePieChartSection = (key, outer) => {
+    return (
+      <Section>
+        {vizData[key].title}
+        <div className="overflow-y-scroll" style={{ height: 300 }}>
+          <SimplePieChart
+            data={vizData[key].data}
+            outer={outer}
+          ></SimplePieChart>
+        </div>
+      </Section>
+    );
+  };
 
   return (
-    <main className="container">
-      <div className="my-3 p-3 bg-body rounded shadow-sm"></div>
-    </main>
+    <Container>
+      {generateBarChartSection("award")}
+      {generatePieChartSection("level")}
+      {generatePieChartSection("firstGeneration", true)}
+      {generatePieChartSection("serviceRegion", true)}
+      <Section>
+        {vizData.gpa.title}
+        {vizData.gpa.average}
+      </Section>
+      <Section>
+        {vizData.pellRecipient.title}
+        {vizData.pellRecipient.amount}
+      </Section>
+      <Section>
+        {vizData.age.title}
+        {vizData.age.average}
+      </Section>
+      {generateBarChartSection("state")}
+      {generateBarChartSection("county")}
+      {generateBarChartSection("major")}
+      <Section>
+        <>Graduates represent</>
+        <>{vizData.country.amount} countries</>
+        <>{vizData.state.amount} states</>
+        <>{vizData.county.amount} counties</>
+      </Section>
+    </Container>
   );
 }

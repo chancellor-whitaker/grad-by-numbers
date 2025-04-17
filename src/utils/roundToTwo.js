@@ -1,3 +1,3 @@
-export function roundToTwo(num) {
-  return +(Math.round(num + "e+2") + "e-2");
+export function roundToTwo(num, x = 2) {
+  return +(Math.round(num + `e+${x}`) + `e-${x}`);
 }
