@@ -5,3 +5,7 @@ body {
 .recharts-wrapper svg {
   overflow: visible;
 }
+
+.flex-row > div {
+  width: 100%;
+}

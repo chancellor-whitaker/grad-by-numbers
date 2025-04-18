@@ -4,6 +4,7 @@ import { SimpleBarChart } from "./components/SimpleBarChart";
 import { SimplePieChart } from "./components/SimplePieChart";
 import { summarizeData } from "./utils/summarizeData";
 import { Container } from "./components/Container";
+import { chartHeight } from "./utils/chartHeight";
 import { usePromise } from "./hooks/usePromise";
 import { getVizData } from "./utils/getVizData";
 import { Section } from "./components/Section";
@@ -49,40 +50,109 @@ export default function App() {
 
   const generateBarChartSection = (key) => {
     return (
-      <Section>
-        {vizData[key].title}
-        <div className="overflow-y-scroll" style={{ height: 300 }}>
-          <SimpleBarChart
-            showOriginalLabels={showOriginalLabels(key)}
-            filteredData={filteredVizData[key].data}
-            data={vizData[key].data}
-            onClick={handleClick}
-          ></SimpleBarChart>
-        </div>
-      </Section>
+      <div style={{ height: chartHeight }} className="overflow-y-scroll">
+        <SimpleBarChart
+          showOriginalLabels={showOriginalLabels(vizData[key].field)}
+          filteredData={filteredVizData[key].data}
+          data={vizData[key].data}
+          onClick={handleClick}
+        ></SimpleBarChart>
+      </div>
     );
   };
 
   const generatePieChartSection = (key) => {
     return (
-      <Section>
-        {vizData[key].title}
-        <div className="overflow-y-scroll" style={{ height: 300 }}>
-          <SimplePieChart
-            showOriginalLabels={showOriginalLabels(key)}
-            filteredData={filteredVizData[key].data}
-            outerRadius={outerRadius}
-            data={vizData[key].data}
-            onClick={handleClick}
-          ></SimplePieChart>
-        </div>
-      </Section>
+      <div style={{ height: chartHeight }} className="overflow-y-scroll">
+        <SimplePieChart
+          showOriginalLabels={showOriginalLabels(vizData[key].field)}
+          filteredData={filteredVizData[key].data}
+          outerRadius={outerRadius}
+          data={vizData[key].data}
+          onClick={handleClick}
+        ></SimplePieChart>
+      </div>
     );
   };
 
   return (
     <Container>
-      {generateBarChartSection("award")}
+      <Section>
+        <div className="d-flex flex-column gap-3">
+          <div className="d-flex flex-row gap-3">
+            <Block>
+              <div className="fs-5">{filteredVizData.award.title}</div>
+              <div>{generateBarChartSection("award")}</div>
+              <div>{generatePieChartSection("level")}</div>
+            </Block>
+            <div className="d-flex flex-column gap-3">
+              <Block>
+                <div className="fs-5">
+                  {filteredVizData.firstGeneration.title}
+                </div>
+                <div>{generatePieChartSection("firstGeneration")}</div>
+              </Block>
+              <Block>
+                <div className="fs-5">
+                  {filteredVizData.serviceRegion.title}
+                </div>
+                <div>{generatePieChartSection("serviceRegion")}</div>
+              </Block>
+            </div>
+            <div className="d-flex flex-column gap-3">
+              <Block>
+                <div className="fs-5">{filteredVizData.gpa.title}</div>
+                <div className="fs-1">{filteredVizData.gpa.average}</div>
+              </Block>
+              <Block>
+                <div className="fs-5">
+                  {filteredVizData.pellRecipient.title}
+                </div>
+                <div className="fs-1">
+                  {filteredVizData.pellRecipient.amount}
+                </div>
+              </Block>
+              <Block>
+                <div className="fs-5">{filteredVizData.age.title}</div>
+                <div className="fs-1">{filteredVizData.age.average}</div>
+              </Block>
+            </div>
+          </div>
+          <div className="d-flex flex-row gap-3">
+            <Block>
+              <div className="fs-5">{filteredVizData.state.title}</div>
+              <div>{generateBarChartSection("state")}</div>
+            </Block>
+            <Block>
+              <div className="fs-5">{filteredVizData.county.title}</div>
+              <div>{generateBarChartSection("county")}</div>
+            </Block>
+            <Block>
+              <div className="fs-5">{filteredVizData.major.title}</div>
+              <div>{generateBarChartSection("major")}</div>
+            </Block>
+          </div>
+          <div className="d-flex flex-row gap-3">
+            <Block>
+              <div className="fs-5">Graduates represent</div>
+              <div className="fs-4">
+                {filteredVizData.country.amount} countries
+              </div>
+              <div className="fs-4">{filteredVizData.state.amount} states</div>
+              <div className="fs-4">
+                {filteredVizData.county.amount} counties
+              </div>
+            </Block>
+            <Block>
+              <div className="fs-5">Chance</div>
+            </Block>
+            <Block>
+              <div className="fs-5">Chance</div>
+            </Block>
+          </div>
+        </div>
+      </Section>
+      {/* {generateBarChartSection("award")}
       {generatePieChartSection("level")}
       {generatePieChartSection("firstGeneration")}
       {generatePieChartSection("serviceRegion")}
@@ -106,7 +176,25 @@ export default function App() {
         <>{filteredVizData.country.amount} countries</>
         <>{filteredVizData.state.amount} states</>
         <>{filteredVizData.county.amount} counties</>
-      </Section>
+      </Section> */}
     </Container>
   );
 }
+
+const Block = ({
+  defaultClassName = "flex-fill p-2 bg-light border border-dark rounded shadow text-center",
+  className = "",
+  as = "div",
+  ...rest
+}) => {
+  const As = as;
+
+  return (
+    <As
+      className={[defaultClassName, className]
+        .filter((string) => string)
+        .join(" ")}
+      {...rest}
+    ></As>
+  );
+};

@@ -1,5 +1,7 @@
 import { ResponsiveContainer, BarChart, XAxis, YAxis, Bar } from "recharts";
 
+import { colors } from "../utils/colors";
+
 export const SimpleBarChart = ({
   showOriginalLabels,
   filteredData = [],
@@ -30,15 +32,15 @@ export const SimpleBarChart = ({
         <YAxis type="category" dataKey="name" />
         <Bar
           label={showOriginalLabels && { position: "right" }}
+          fill={colors.backgroundBar}
           onClick={onClick}
           dataKey="value"
-          fill="#8884d8"
         />
         <Bar
-          label={{ position: "right", fill: "#82ca9d" }}
+          label={{ position: "right" }}
+          fill={colors.foregroundBar}
           dataKey="filteredValue"
           onClick={onClick}
-          fill="#82ca9d"
         />
       </BarChart>
     </ResponsiveContainer>
