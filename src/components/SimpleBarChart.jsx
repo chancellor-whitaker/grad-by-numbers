@@ -32,13 +32,13 @@ export const SimpleBarChart = ({
         <YAxis type="category" dataKey="name" />
         <Bar
           label={showOriginalLabels && { position: "right" }}
-          fill={colors.backgroundBar}
+          fill={colors.bar.background}
           onClick={onClick}
           dataKey="value"
         />
         <Bar
           label={{ position: "right" }}
-          fill={colors.foregroundBar}
+          fill={colors.bar.foreground}
           dataKey="filteredValue"
           onClick={onClick}
         />

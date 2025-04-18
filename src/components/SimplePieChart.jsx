@@ -1,4 +1,4 @@
-import { ResponsiveContainer, LabelList, PieChart, Pie } from "recharts";
+import { ResponsiveContainer, LabelList, PieChart, Cell, Pie } from "recharts";
 
 import { chartHeight } from "../utils/chartHeight";
 import { colors } from "../utils/colors";
@@ -14,7 +14,7 @@ export const SimplePieChart = ({
     <ResponsiveContainer height={chartHeight} width="100%">
       <PieChart>
         <Pie
-          fill={colors.backgroundBar}
+          fill={colors.bar.background}
           onClick={onClick}
           outerRadius={100}
           dataKey="value"
@@ -22,6 +22,9 @@ export const SimplePieChart = ({
           cx="50%"
           cy="50%"
         >
+          {data.map(({ name }, index) => (
+            <Cell fill={colors[name]?.background} key={`cell-${index}`} />
+          ))}
           {showOriginalLabels && (
             <LabelList
               valueAccessor={({ value, name }) => `${name}, ${value}`}
@@ -29,7 +32,7 @@ export const SimplePieChart = ({
           )}
         </Pie>
         <Pie
-          fill={colors.foregroundBar}
+          fill={colors.bar.foreground}
           outerRadius={outerRadius}
           data={filteredData}
           onClick={onClick}
@@ -37,6 +40,9 @@ export const SimplePieChart = ({
           cx="50%"
           cy="50%"
         >
+          {filteredData.map(({ name }, index) => (
+            <Cell fill={colors[name]?.foreground} key={`cell-${index}`} />
+          ))}
           <LabelList
             valueAccessor={({ value, name }) => `${name}, ${value}`}
           ></LabelList>
