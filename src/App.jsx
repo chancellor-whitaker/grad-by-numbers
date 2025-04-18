@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { SimpleBarChart } from "./components/SimpleBarChart";
 import { SimplePieChart } from "./components/SimplePieChart";
 import { summarizeData } from "./utils/summarizeData";
@@ -8,48 +10,66 @@ import { Section } from "./components/Section";
 import { promise } from "./utils/promise";
 
 export default function App() {
+  const [filterBy, setFilterBy] = useState([]);
+
+  const noFilterActive = filterBy.length !== 2;
+
   const data = usePromise(promise);
 
-  const summary = summarizeData(data);
+  const filteredData = noFilterActive
+    ? data
+    : data.filter(({ [filterBy[0]]: value }) => value === filterBy[1]);
 
-  // show occurrence of each award in bar chart, get sum of occurrences
-  // show percent occurrence of each level in pie chart
-  // show occurrence of each first gen value in pie chart
-  // show occurrence of each service region value in pie chart
-  // find avg grad gpa (unique value * occurrence) / (total values)
-  // show count of pell recipient field where value is yes
-  // find avg age (unique value * occurrence) / (total values)
-  // show occurrence of each state in bar chart, find num of distinct states
-  // show occurrence of each ky county in bar chart, find num of distinct ky counties
-  // show occurrence of each major in bar chart
-  // find num of distinct countries
+  const outerRadius =
+    filteredData?.length && data?.length
+      ? (filteredData.length / data.length) * 100
+      : 100;
 
-  // organize visualization into recharts datasets as described above
-  // handle managing filter state & maintaining both unfiltered viz data & filtered viz data
+  const vizData = getVizData(summarizeData(data));
 
-  const vizData = getVizData(summary);
+  const filteredVizData = getVizData(summarizeData(filteredData));
 
-  console.log(vizData);
+  const handleClick = (...props) => {
+    console.log(props);
+
+    const newPair = [props[0].field, props[0].name];
+
+    setFilterBy((currentPair) => {
+      if (currentPair.length !== 2) return newPair;
+
+      if (currentPair[0] === newPair[0] && currentPair[1] === newPair[1]) {
+        return [];
+      }
+
+      return newPair;
+    });
+  };
 
   const generateBarChartSection = (key) => {
     return (
       <Section>
         {vizData[key].title}
         <div className="overflow-y-scroll" style={{ height: 300 }}>
-          <SimpleBarChart data={vizData[key].data}></SimpleBarChart>
+          <SimpleBarChart
+            filteredData={filteredVizData[key].data}
+            data={vizData[key].data}
+            onClick={handleClick}
+          ></SimpleBarChart>
         </div>
       </Section>
     );
   };
 
-  const generatePieChartSection = (key, outer) => {
+  const generatePieChartSection = (key) => {
     return (
       <Section>
         {vizData[key].title}
         <div className="overflow-y-scroll" style={{ height: 300 }}>
           <SimplePieChart
+            filteredData={filteredVizData[key].data}
+            outerRadius={outerRadius}
             data={vizData[key].data}
-            outer={outer}
+            onClick={handleClick}
           ></SimplePieChart>
         </div>
       </Section>
@@ -60,28 +80,28 @@ export default function App() {
     <Container>
       {generateBarChartSection("award")}
       {generatePieChartSection("level")}
-      {generatePieChartSection("firstGeneration", true)}
-      {generatePieChartSection("serviceRegion", true)}
+      {generatePieChartSection("firstGeneration")}
+      {generatePieChartSection("serviceRegion")}
       <Section>
-        {vizData.gpa.title}
-        {vizData.gpa.average}
+        {filteredVizData.gpa.title}
+        {filteredVizData.gpa.average}
       </Section>
       <Section>
-        {vizData.pellRecipient.title}
-        {vizData.pellRecipient.amount}
+        {filteredVizData.pellRecipient.title}
+        {filteredVizData.pellRecipient.amount}
       </Section>
       <Section>
-        {vizData.age.title}
-        {vizData.age.average}
+        {filteredVizData.age.title}
+        {filteredVizData.age.average}
       </Section>
       {generateBarChartSection("state")}
       {generateBarChartSection("county")}
       {generateBarChartSection("major")}
       <Section>
         <>Graduates represent</>
-        <>{vizData.country.amount} countries</>
-        <>{vizData.state.amount} states</>
-        <>{vizData.county.amount} counties</>
+        <>{filteredVizData.country.amount} countries</>
+        <>{filteredVizData.state.amount} states</>
+        <>{filteredVizData.county.amount} counties</>
       </Section>
     </Container>
   );

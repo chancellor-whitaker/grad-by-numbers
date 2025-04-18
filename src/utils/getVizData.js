@@ -2,17 +2,17 @@ import { getChartData } from "./getChartData";
 import { roundToTwo } from "./roundToTwo";
 
 export const getVizData = (summary) => ({
+  level: {
+    data: getChartData(summary, "SHRDGMR_LEVL_CODE", true).map(
+      ({ value, ...rest }) => ({ value: roundToTwo(value, 4), ...rest })
+    ),
+    chart: "pie",
+  },
   age: {
     average: Math.floor(summary["Age"]?.average),
     max: Math.floor(summary["Age"]?.max),
     min: Math.floor(summary["Age"]?.min),
     title: "Average Age",
-  },
-  level: {
-    data: getChartData(summary, "SHRDGMR_LEVL_CODE", true).map(
-      ({ value, name }) => ({ value: roundToTwo(value, 4), name })
-    ),
-    chart: "pie",
   },
   award: {
     title: `${summary["acat_desc"]?.sum} Awards`,

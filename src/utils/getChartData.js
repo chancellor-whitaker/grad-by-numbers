@@ -6,6 +6,7 @@ export const getChartData = (summary, field, ratio) => {
   return Object.entries(object)
     .map(([name, { [valueKey]: value }]) => ({
       value,
+      field,
       name,
     }))
     .filter(({ name }) => name)
