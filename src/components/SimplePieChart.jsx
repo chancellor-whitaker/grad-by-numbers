@@ -1,6 +1,7 @@
 import { ResponsiveContainer, LabelList, PieChart, Pie } from "recharts";
 
 export const SimplePieChart = ({
+  showOriginalLabels,
   filteredData = [],
   outerRadius = 100,
   height = 300,
@@ -19,9 +20,11 @@ export const SimplePieChart = ({
           cx="50%"
           cy="50%"
         >
-          <LabelList
-            valueAccessor={({ value, name }) => `${name}, ${value}`}
-          ></LabelList>
+          {showOriginalLabels && (
+            <LabelList
+              valueAccessor={({ value, name }) => `${name}, ${value}`}
+            ></LabelList>
+          )}
         </Pie>
         <Pie
           outerRadius={outerRadius}

@@ -1,6 +1,11 @@
 import { ResponsiveContainer, BarChart, XAxis, YAxis, Bar } from "recharts";
 
-export const SimpleBarChart = ({ filteredData = [], data = [], onClick }) => {
+export const SimpleBarChart = ({
+  showOriginalLabels,
+  filteredData = [],
+  data = [],
+  onClick,
+}) => {
   const height = data.length * 50;
 
   const object = Object.fromEntries(
@@ -24,13 +29,13 @@ export const SimpleBarChart = ({ filteredData = [], data = [], onClick }) => {
         <XAxis dataKey="value" type="number" hide />
         <YAxis type="category" dataKey="name" />
         <Bar
-          label={{ position: "right" }}
+          label={showOriginalLabels && { position: "right" }}
           onClick={onClick}
           dataKey="value"
           fill="#8884d8"
         />
         <Bar
-          label={{ position: "right" }}
+          label={{ position: "right", fill: "#82ca9d" }}
           dataKey="filteredValue"
           onClick={onClick}
           fill="#82ca9d"

@@ -29,6 +29,8 @@ export default function App() {
 
   const filteredVizData = getVizData(summarizeData(filteredData));
 
+  const showOriginalLabels = (key) => !noFilterActive && key === filterBy[0];
+
   const handleClick = (...props) => {
     console.log(props);
 
@@ -51,6 +53,7 @@ export default function App() {
         {vizData[key].title}
         <div className="overflow-y-scroll" style={{ height: 300 }}>
           <SimpleBarChart
+            showOriginalLabels={showOriginalLabels(key)}
             filteredData={filteredVizData[key].data}
             data={vizData[key].data}
             onClick={handleClick}
@@ -66,6 +69,7 @@ export default function App() {
         {vizData[key].title}
         <div className="overflow-y-scroll" style={{ height: 300 }}>
           <SimplePieChart
+            showOriginalLabels={showOriginalLabels(key)}
             filteredData={filteredVizData[key].data}
             outerRadius={outerRadius}
             data={vizData[key].data}
