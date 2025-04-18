@@ -3,11 +3,14 @@ import { useState } from "react";
 import { SimpleBarChart } from "./components/SimpleBarChart";
 import { SimplePieChart } from "./components/SimplePieChart";
 import { summarizeData } from "./utils/summarizeData";
+import { FlexColumn } from "./components/FlexColumn";
 import { Container } from "./components/Container";
 import { chartHeight } from "./utils/chartHeight";
 import { usePromise } from "./hooks/usePromise";
 import { getVizData } from "./utils/getVizData";
 import { Section } from "./components/Section";
+import { FlexRow } from "./components/FlexRow";
+import { Block } from "./components/Block";
 import { promise } from "./utils/promise";
 
 export default function App() {
@@ -75,17 +78,20 @@ export default function App() {
     );
   };
 
+  // if every child of a flex-row is a flex-column, you can ensure proper width spacing (by making all flex-columns have w-100)
+  // mixed up how the sizing of the filtered pie chart is calculated (don't change proportions, just change outer radius size of each cell based on amount still active vs amount originally active)
+
   return (
     <Container>
       <Section>
-        <div className="d-flex flex-column gap-3">
-          <div className="d-flex flex-row gap-3">
+        <FlexColumn>
+          <FlexRow>
             <Block>
               <div className="fs-5">{filteredVizData.award.title}</div>
               <div>{generateBarChartSection("award")}</div>
               <div>{generatePieChartSection("level")}</div>
             </Block>
-            <div className="d-flex flex-column gap-3">
+            <FlexColumn>
               <Block>
                 <div className="fs-5">
                   {filteredVizData.firstGeneration.title}
@@ -98,8 +104,8 @@ export default function App() {
                 </div>
                 <div>{generatePieChartSection("serviceRegion")}</div>
               </Block>
-            </div>
-            <div className="d-flex flex-column gap-3">
+            </FlexColumn>
+            <FlexColumn>
               <Block>
                 <div className="fs-5">{filteredVizData.gpa.title}</div>
                 <div className="fs-1">{filteredVizData.gpa.average}</div>
@@ -116,9 +122,9 @@ export default function App() {
                 <div className="fs-5">{filteredVizData.age.title}</div>
                 <div className="fs-1">{filteredVizData.age.average}</div>
               </Block>
-            </div>
-          </div>
-          <div className="d-flex flex-row gap-3">
+            </FlexColumn>
+          </FlexRow>
+          <FlexRow>
             <Block>
               <div className="fs-5">{filteredVizData.state.title}</div>
               <div>{generateBarChartSection("state")}</div>
@@ -131,8 +137,8 @@ export default function App() {
               <div className="fs-5">{filteredVizData.major.title}</div>
               <div>{generateBarChartSection("major")}</div>
             </Block>
-          </div>
-          <div className="d-flex flex-row gap-3">
+          </FlexRow>
+          <FlexRow>
             <Block>
               <div className="fs-5">Graduates represent</div>
               <div className="fs-4">
@@ -149,8 +155,8 @@ export default function App() {
             <Block>
               <div className="fs-5">Chance</div>
             </Block>
-          </div>
-        </div>
+          </FlexRow>
+        </FlexColumn>
       </Section>
       {/* {generateBarChartSection("award")}
       {generatePieChartSection("level")}
@@ -180,21 +186,3 @@ export default function App() {
     </Container>
   );
 }
-
-const Block = ({
-  defaultClassName = "flex-fill p-2 bg-light border border-dark rounded shadow text-center",
-  className = "",
-  as = "div",
-  ...rest
-}) => {
-  const As = as;
-
-  return (
-    <As
-      className={[defaultClassName, className]
-        .filter((string) => string)
-        .join(" ")}
-      {...rest}
-    ></As>
-  );
-};
