@@ -1,5 +1,5 @@
 export const Block = ({
-  defaultClassName = "flex-fill p-2 bg-light border border-dark rounded shadow text-center",
+  defaultClassName = "flex-fill p-2 bg-maroon text-white rounded shadow text-center",
   className = "",
   as = "div",
   ...rest

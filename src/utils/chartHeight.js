@@ -1,1 +1,1 @@
-export const chartHeight = 250;
+export const chartHeight = 300;

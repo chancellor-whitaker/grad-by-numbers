@@ -51,28 +51,30 @@ export default function App() {
     });
   };
 
-  const generateBarChartSection = (key) => {
+  const generateBarChartSection = (key, props) => {
     return (
-      <div style={{ height: chartHeight }} className="overflow-y-scroll">
+      <div style={{ height: chartHeight }} className="overflow-auto">
         <SimpleBarChart
           showOriginalLabels={showOriginalLabels(vizData[key].field)}
           filteredData={filteredVizData[key].data}
           data={vizData[key].data}
           onClick={handleClick}
+          {...props}
         ></SimpleBarChart>
       </div>
     );
   };
 
-  const generatePieChartSection = (key) => {
+  const generatePieChartSection = (key, props) => {
     return (
-      <div style={{ height: chartHeight }} className="overflow-y-scroll">
+      <div style={{ height: chartHeight }} className="overflow-auto">
         <SimplePieChart
           showOriginalLabels={showOriginalLabels(vizData[key].field)}
           filteredData={filteredVizData[key].data}
           outerRadius={outerRadius}
           data={vizData[key].data}
           onClick={handleClick}
+          {...props}
         ></SimplePieChart>
       </div>
     );
@@ -82,24 +84,26 @@ export default function App() {
   // mixed up how the sizing of the filtered pie chart is calculated (don't change proportions, just change outer radius size of each cell based on amount still active vs amount originally active)
 
   return (
-    <Container>
+    <Container style={{ fontSize: "small" }}>
       <Section>
         <FlexColumn>
           <FlexRow>
             <Block>
-              <div className="fs-5">{filteredVizData.award.title}</div>
+              <div className="fs-5 text-bronze fw-bold">
+                {filteredVizData.award.title}
+              </div>
               <div>{generateBarChartSection("award")}</div>
               <div>{generatePieChartSection("level")}</div>
             </Block>
             <FlexColumn>
               <Block>
-                <div className="fs-5">
+                <div className="fs-5 text-bronze fw-bold">
                   {filteredVizData.firstGeneration.title}
                 </div>
                 <div>{generatePieChartSection("firstGeneration")}</div>
               </Block>
               <Block>
-                <div className="fs-5">
+                <div className="fs-5 text-bronze fw-bold">
                   {filteredVizData.serviceRegion.title}
                 </div>
                 <div>{generatePieChartSection("serviceRegion")}</div>
@@ -107,11 +111,13 @@ export default function App() {
             </FlexColumn>
             <FlexColumn>
               <Block>
-                <div className="fs-5">{filteredVizData.gpa.title}</div>
+                <div className="fs-5 text-bronze fw-bold">
+                  {filteredVizData.gpa.title}
+                </div>
                 <div className="fs-1">{filteredVizData.gpa.average}</div>
               </Block>
               <Block>
-                <div className="fs-5">
+                <div className="fs-5 text-bronze fw-bold">
                   {filteredVizData.pellRecipient.title}
                 </div>
                 <div className="fs-1">
@@ -119,28 +125,38 @@ export default function App() {
                 </div>
               </Block>
               <Block>
-                <div className="fs-5">{filteredVizData.age.title}</div>
+                <div className="fs-5 text-bronze fw-bold">
+                  {filteredVizData.age.title}
+                </div>
                 <div className="fs-1">{filteredVizData.age.average}</div>
               </Block>
             </FlexColumn>
           </FlexRow>
           <FlexRow>
             <Block>
-              <div className="fs-5">{filteredVizData.state.title}</div>
+              <div className="fs-5 text-bronze fw-bold">
+                {filteredVizData.state.title}
+              </div>
               <div>{generateBarChartSection("state")}</div>
             </Block>
             <Block>
-              <div className="fs-5">{filteredVizData.county.title}</div>
+              <div className="fs-5 text-bronze fw-bold">
+                {filteredVizData.county.title}
+              </div>
               <div>{generateBarChartSection("county")}</div>
             </Block>
             <Block>
-              <div className="fs-5">{filteredVizData.major.title}</div>
-              <div>{generateBarChartSection("major")}</div>
+              <div className="fs-5 text-bronze fw-bold">
+                {filteredVizData.major.title}
+              </div>
+              <div>{generateBarChartSection("major", { yAxisWidth: 125 })}</div>
             </Block>
           </FlexRow>
           <FlexRow>
             <Block>
-              <div className="fs-5">Graduates represent</div>
+              <div className="fs-5 text-bronze fw-bold">
+                Graduates represent
+              </div>
               <div className="fs-4">
                 {filteredVizData.country.amount} countries
               </div>
@@ -150,10 +166,10 @@ export default function App() {
               </div>
             </Block>
             <Block>
-              <div className="fs-5">Chance</div>
+              <div className="fs-5 text-bronze fw-bold">Chance</div>
             </Block>
             <Block>
-              <div className="fs-5">Chance</div>
+              <div className="fs-5 text-bronze fw-bold">Chance</div>
             </Block>
           </FlexRow>
         </FlexColumn>

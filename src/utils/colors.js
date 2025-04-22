@@ -1,3 +1,7 @@
+const positiveScheme = { foreground: "#FFC658", background: "#E6A65D" };
+
+const negativeScheme = { foreground: "#C5CFDA", background: "#87909A" };
+
 export const colors = {
   bar: positiveScheme,
   UG: negativeScheme,
@@ -5,7 +9,3 @@ export const colors = {
   N: negativeScheme,
   Y: positiveScheme,
 };
-
-const positiveScheme = { foreground: "#FFC658", background: "#E6A65D" };
-
-const negativeScheme = { foreground: "#C5CFDA", background: "#87909A" };

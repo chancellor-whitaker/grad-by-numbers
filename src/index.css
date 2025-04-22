@@ -6,6 +6,27 @@ body {
   overflow: visible;
 }
 
-.flex-row > div {
+/* .flex-row > div {
   width: 100%;
+} */
+
+.bg-maroon {
+  background-color: #861f41;
+}
+
+.bg-lightgray {
+  background-color: #c5cfda;
+}
+
+.text-bronze {
+  color: #e6a65d;
+}
+
+.arrow-right {
+  width: 0;
+  height: 0;
+  border-top: 21px solid transparent;
+  border-bottom: 21px solid transparent;
+
+  border-left: 21px solid #861f41;
 }

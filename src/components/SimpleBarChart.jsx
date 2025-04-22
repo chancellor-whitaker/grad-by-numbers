@@ -5,6 +5,7 @@ import { colors } from "../utils/colors";
 export const SimpleBarChart = ({
   showOriginalLabels,
   filteredData = [],
+  yAxisWidth = 100,
   data = [],
   onClick,
 }) => {
@@ -29,15 +30,22 @@ export const SimpleBarChart = ({
         data={chartData}
       >
         <XAxis dataKey="value" type="number" hide />
-        <YAxis type="category" dataKey="name" />
+        <YAxis
+          tick={{ fill: "white" }}
+          width={yAxisWidth}
+          tickLine={false}
+          axisLine={false}
+          type="category"
+          dataKey="name"
+        />
         <Bar
-          label={showOriginalLabels && { position: "right" }}
+          label={showOriginalLabels && { position: "right", fill: "white" }}
           fill={colors.bar.background}
           onClick={onClick}
           dataKey="value"
         />
         <Bar
-          label={{ position: "right" }}
+          label={{ position: "right", fill: "white" }}
           fill={colors.bar.foreground}
           dataKey="filteredValue"
           onClick={onClick}
