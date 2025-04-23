@@ -6,7 +6,11 @@ import { summarizeData } from "./utils/summarizeData";
 import { chartHeight } from "./utils/chartHeight";
 import { usePromise } from "./hooks/usePromise";
 import { getVizData } from "./utils/getVizData";
+import scholar from "./assets/scholar.png";
 import { promise } from "./utils/promise";
+import donate from "./assets/donate.png";
+import globe from "./assets/globe.png";
+import star from "./assets/star.png";
 
 export default function App() {
   const [filterBy, setFilterBy] = useState([]);
@@ -58,12 +62,9 @@ export default function App() {
     );
   };
 
-  const generatePieChartSection = (key, props) => {
+  const generatePieChartSection = (key, props, height = chartHeight) => {
     return (
-      <div
-        className="overflow-auto small fw-normal"
-        style={{ height: chartHeight }}
-      >
+      <div className="overflow-auto small fw-normal" style={{ height }}>
         <SimplePieChart
           showOriginalLabels={showOriginalLabels(vizData[key].field)}
           filteredData={filteredVizData[key].data}
@@ -83,7 +84,17 @@ export default function App() {
             <FlexColumn>
               <FlexRow wrap>
                 <Col>
-                  <Icon className="fs-1">mortarboard-fill</Icon>
+                  {/* <Icon className="fs-1">mortarboard-fill</Icon> */}
+                  <div
+                    style={{
+                      backgroundImage: `url("${scholar}")`,
+                      backgroundSize: "contain",
+                      cursor: "inherit",
+                      height: 100,
+                      width: 85,
+                    }}
+                    className="imageBackground"
+                  />
                 </Col>
                 <Col>
                   <FlexRow gap={2}>
@@ -95,8 +106,12 @@ export default function App() {
                 </Col>
                 <Col></Col>
               </FlexRow>
-              <div>{generateBarChartSection("award")}</div>
-              <div>{generatePieChartSection("level")}</div>
+              <div className="position-relative">
+                {generateBarChartSection("award")}
+                {/* <div className="position-absolute w-100 top-0">
+                  {generatePieChartSection("level")}
+                </div> */}
+              </div>
             </FlexColumn>
           </Section>
           <Section>
@@ -112,9 +127,19 @@ export default function App() {
             </FlexColumn>
           </Section>
           <Section>
-            <FlexRow>
+            <FlexRow wrap>
               <Col>
-                <Icon className="fs-1">star</Icon>
+                {/* <Icon className="fs-1">star</Icon> */}
+                <div
+                  style={{
+                    backgroundImage: `url("${star}")`,
+                    backgroundSize: "contain",
+                    cursor: "inherit",
+                    height: 70,
+                    width: 74,
+                  }}
+                  className="imageBackground"
+                />
               </Col>
               <Col>
                 <FlexColumn gap={0}>
@@ -128,9 +153,19 @@ export default function App() {
             </FlexRow>
           </Section>
           <Section>
-            <FlexRow>
+            <FlexRow wrap>
               <Col>
-                <Icon className="fs-1">currency-dollar</Icon>
+                {/* <Icon className="fs-1">currency-dollar</Icon> */}
+                <div
+                  style={{
+                    backgroundImage: `url("${donate}")`,
+                    backgroundSize: "contain",
+                    cursor: "inherit",
+                    height: 70,
+                    width: 79,
+                  }}
+                  className="imageBackground"
+                />
               </Col>
               <Col>
                 <FlexColumn gap={0}>
@@ -144,9 +179,19 @@ export default function App() {
             </FlexRow>
           </Section>
           <Section>
-            <FlexRow>
+            <FlexRow wrap>
               <Col>
-                <Icon className="fs-1">mortarboard-fill</Icon>
+                {/* <Icon className="fs-1">mortarboard-fill</Icon> */}
+                <div
+                  style={{
+                    backgroundImage: `url("${scholar}")`,
+                    backgroundSize: "contain",
+                    cursor: "inherit",
+                    height: 70,
+                    width: 60,
+                  }}
+                  className="imageBackground"
+                />
               </Col>
               <Col>
                 <FlexColumn gap={0}>
@@ -210,7 +255,18 @@ export default function App() {
                   </CenteredText>
                 </FlexColumn>
               </Col>
-              <Col></Col>
+              <Col>
+                <div
+                  style={{
+                    backgroundImage: `url("${globe}")`,
+                    backgroundSize: "contain",
+                    cursor: "inherit",
+                    height: 220,
+                    width: 182,
+                  }}
+                  className="imageBackground"
+                />
+              </Col>
             </FlexRow>
           </Section>
         </FlexColumn>

@@ -30,3 +30,9 @@ body {
 
   border-left: 21px solid #861f41;
 }
+
+.imageBackground {
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
