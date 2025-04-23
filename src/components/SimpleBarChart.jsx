@@ -3,6 +3,8 @@ import { ResponsiveContainer, BarChart, XAxis, YAxis, Bar } from "recharts";
 import { colors } from "../utils/colors";
 
 export const SimpleBarChart = ({
+  colorScheme = colors.positiveScheme,
+  textColor = "white",
   showOriginalLabels,
   filteredData = [],
   yAxisWidth = 100,
@@ -31,7 +33,7 @@ export const SimpleBarChart = ({
       >
         <XAxis dataKey="value" type="number" hide />
         <YAxis
-          tick={{ fill: "white" }}
+          tick={{ fill: textColor }}
           width={yAxisWidth}
           tickLine={false}
           axisLine={false}
@@ -39,14 +41,14 @@ export const SimpleBarChart = ({
           dataKey="name"
         />
         <Bar
-          label={showOriginalLabels && { position: "right", fill: "white" }}
-          fill={colors.bar.background}
+          label={showOriginalLabels && { position: "right", fill: textColor }}
+          fill={colorScheme.background}
           onClick={onClick}
           dataKey="value"
         />
         <Bar
-          label={{ position: "right", fill: "white" }}
-          fill={colors.bar.foreground}
+          label={{ position: "right", fill: textColor }}
+          fill={colorScheme.foreground}
           dataKey="filteredValue"
           onClick={onClick}
         />

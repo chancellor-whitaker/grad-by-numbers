@@ -4,7 +4,7 @@ import { chartHeight } from "../utils/chartHeight";
 import { colors } from "../utils/colors";
 
 export const SimplePieChart = ({
-  // showOriginalLabels,
+  showOriginalLabels,
   filteredData = [],
   data = [],
   onClick,
@@ -18,6 +18,10 @@ export const SimplePieChart = ({
   );
 
   const chartData = Object.values(object);
+
+  console.log(chartData);
+
+  const label = showOriginalLabels ? renderCustomizedLabel : null;
 
   return (
     <ResponsiveContainer height={chartHeight} width="100%">
@@ -41,13 +45,13 @@ export const SimplePieChart = ({
           )}
         </Pie> */}
         <Pie
-          label={renderCustomizedLabel}
-          fill={colors.bar.background}
+          // fill={colors.bar.foreground}
           onClick={onClick}
           outerRadius={100}
           labelLine={false}
           data={chartData}
           dataKey="value"
+          label={label}
           cx="50%"
           cy="50%"
         >
@@ -55,6 +59,29 @@ export const SimplePieChart = ({
             <Cell fill={colors[name]?.background} key={`cell-${index}`} />
           ))}
         </Pie>
+        {chartData.map(({ filteredValue = 0, name: category, value }) => (
+          <Pie
+            outerRadius={(filteredValue / value) * 100}
+            label={renderCustomizedLabel}
+            // fill={colors.bar.foreground}
+            onClick={onClick}
+            labelLine={false}
+            data={chartData}
+            dataKey="value"
+            key={category}
+            cx="50%"
+            cy="50%"
+          >
+            {chartData.map(({ name }, index) => (
+              <Cell
+                // strokeOpacity={name === category ? 1 : 0}
+                opacity={name === category ? 1 : 0}
+                fill={colors[name]?.foreground}
+                key={`cell-${index}`}
+              />
+            ))}
+          </Pie>
+        ))}
       </PieChart>
     </ResponsiveContainer>
   );
@@ -69,14 +96,19 @@ const renderCustomizedLabel = ({
   value,
   cx,
   cy,
+  ...rest
 }) => {
-  const isPercent = value === percent;
+  const yourValue = rest.payload.filteredValue
+    ? rest.payload.filteredValue
+    : value;
+
+  const isPercent = yourValue === percent;
 
   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
   const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
-  return (
+  return outerRadius <= 0 ? null : (
     <text
       textAnchor={x > cx ? "start" : "end"}
       dominantBaseline="central"
@@ -84,7 +116,9 @@ const renderCustomizedLabel = ({
       x={x}
       y={y}
     >
-      {isPercent ? `${(percent * 100).toFixed(0)}%` : value.toLocaleString()}
+      {isPercent
+        ? `${(percent * 100).toFixed(0)}%`
+        : yourValue?.toLocaleString()}
     </text>
   );
 };
