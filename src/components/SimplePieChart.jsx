@@ -56,7 +56,11 @@ export const SimplePieChart = ({
           cy="50%"
         >
           {chartData.map(({ name }, index) => (
-            <Cell fill={colors[name]?.background} key={`cell-${index}`} />
+            <Cell
+              fill={colors[name]?.background}
+              key={`cell-${index}`}
+              opacity={1}
+            />
           ))}
         </Pie>
         {chartData.map(({ filteredValue = 0, name: category, value }) => (
@@ -93,6 +97,7 @@ const renderCustomizedLabel = ({
   outerRadius,
   midAngle,
   percent,
+  opacity,
   value,
   cx,
   cy,
@@ -108,7 +113,7 @@ const renderCustomizedLabel = ({
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
   const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
-  return outerRadius <= 0 ? null : (
+  return outerRadius === 0 || opacity === 0 ? null : (
     <text
       textAnchor={x > cx ? "start" : "end"}
       dominantBaseline="central"
