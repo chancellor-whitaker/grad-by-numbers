@@ -11,11 +11,11 @@ body {
 } */
 
 .bg-maroon {
-  background-color: #861f41;
+  background-color: #861f41 !important;
 }
 
 .bg-lightgray {
-  background-color: #c5cfda;
+  background-color: #c5cfda !important;
 }
 
 .text-bronze {
@@ -35,4 +35,10 @@ body {
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+.bd-example-flex div:not(.vr) {
+  --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+  background-color: rgba(var(--bd-violet-rgb), 0.15);
+  border: 1px solid rgba(var(--bd-violet-rgb), 0.3);
 }

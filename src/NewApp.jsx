@@ -13,6 +13,17 @@ import { colors } from "./utils/colors";
 import globe from "./assets/globe.png";
 import star from "./assets/star.png";
 
+// for kystats blocks, pull value, desc, & link (https://kystats.ky.gov/Reports/Tableau/2024_PSFR)
+// prevent labels from going out of bounds
+// space between bars & make middle bar chart bars smaller
+// try to position GR v UG pie chart as shown in original report (do separate block otherwise)
+// * make sure no awkward text wrapping in blocks
+// handle block wrapping
+
+// top row: first block
+// 2nd row: 2 cols: 2 pie charts, then 3 stat blocks
+//
+
 export default function App() {
   const [filterBy, setFilterBy] = useState([]);
 
@@ -81,13 +92,12 @@ export default function App() {
     <main className="container">
       <div className="my-3">
         <FlexColumn>
-          <FlexRow>
+          <FlexRow alignItems="stretch">
             <Col>
               <Section>
                 <FlexColumn>
-                  <FlexRow wrap>
+                  <FlexRow>
                     <Col>
-                      {/* <Icon className="fs-1">mortarboard-fill</Icon> */}
                       <div
                         style={{
                           backgroundImage: `url("${scholar}")`,
@@ -100,7 +110,7 @@ export default function App() {
                       />
                     </Col>
                     <Col>
-                      <FlexRow gap={2}>
+                      <FlexRow>
                         <div className="fs-1 text-white">
                           {filteredVizData.award.amount}
                         </div>
@@ -137,7 +147,7 @@ export default function App() {
             <Col>
               <FlexColumn>
                 <Section>
-                  <FlexRow wrap>
+                  <FlexRow>
                     <Col>
                       {/* <Icon className="fs-1">star</Icon> */}
                       <div
@@ -163,7 +173,7 @@ export default function App() {
                   </FlexRow>
                 </Section>
                 <Section>
-                  <FlexRow wrap>
+                  <FlexRow>
                     <Col>
                       {/* <Icon className="fs-1">currency-dollar</Icon> */}
                       <div
@@ -189,7 +199,7 @@ export default function App() {
                   </FlexRow>
                 </Section>
                 <Section>
-                  <FlexRow wrap>
+                  <FlexRow>
                     <Col>
                       {/* <Icon className="fs-1">mortarboard-fill</Icon> */}
                       <div
@@ -232,7 +242,7 @@ export default function App() {
               </FlexColumn>
             </Col>
           </FlexRow>
-          <FlexRow>
+          <FlexRow alignItems="stretch">
             <Col>
               <div>
                 <Section className="rounded-bottom-0" bg="lightgray">
@@ -274,7 +284,7 @@ export default function App() {
               </div>
             </Col>
           </FlexRow>
-          <FlexRow>
+          <FlexRow alignItems="stretch">
             <Col>
               <Section>
                 <FlexRow>
@@ -309,8 +319,74 @@ export default function App() {
                 </FlexRow>
               </Section>
             </Col>
-            <Col></Col>
-            <Col></Col>
+            <Col>
+              <Section>
+                <FlexColumn gap={2}>
+                  <CenteredText className="text-wrap">
+                    Percent of graduates working in Kentucky after 3 years
+                  </CenteredText>
+                  <CenteredText>
+                    <FlexRow className="fs-2">
+                      <div className="text-white">63.9</div>
+                      <div className="text-light">%</div>
+                    </FlexRow>
+                  </CenteredText>
+                  <FlexRow>
+                    <Col></Col>
+                    <Col></Col>
+                    <Col>
+                      <FlexColumn className="small text-light" gap={0}>
+                        <div>
+                          Source:{" "}
+                          <a
+                            href="https://kystats.ky.gov/Reports/Tableau/2024_PSFR"
+                            className="link-light"
+                            target="_blank"
+                          >
+                            KYSTATS
+                          </a>
+                        </div>
+                        <div>(Non-filtering)</div>
+                      </FlexColumn>
+                    </Col>
+                  </FlexRow>
+                </FlexColumn>
+              </Section>
+            </Col>
+            <Col>
+              <Section>
+                <FlexColumn gap={2}>
+                  <CenteredText className="text-wrap">
+                    Median salary 3 years after graduation
+                  </CenteredText>
+                  <CenteredText>
+                    <FlexRow className="fs-2">
+                      <div className="text-light">$</div>
+                      <div className="text-white">49,315</div>
+                    </FlexRow>
+                  </CenteredText>
+                  <FlexRow>
+                    <Col></Col>
+                    <Col></Col>
+                    <Col>
+                      <FlexColumn className="small text-light" gap={0}>
+                        <div>
+                          Source:{" "}
+                          <a
+                            href="https://kystats.ky.gov/Reports/Tableau/2024_PSFR"
+                            className="link-light"
+                            target="_blank"
+                          >
+                            KYSTATS
+                          </a>
+                        </div>
+                        <div>(Non-filtering)</div>
+                      </FlexColumn>
+                    </Col>
+                  </FlexRow>
+                </FlexColumn>
+              </Section>
+            </Col>
           </FlexRow>
         </FlexColumn>
       </div>
@@ -359,45 +435,6 @@ const CenteredText = ({
   );
 };
 
-const Placeholder = ({
-  defaultClassName = "border",
-  style = { height: 100 },
-  className = "",
-  as = "div",
-  ...rest
-}) => {
-  const As = as;
-
-  return (
-    <As
-      className={[defaultClassName, className]
-        .filter((value) => value)
-        .join(" ")}
-      style={style}
-      {...rest}
-    ></As>
-  );
-};
-
-const Icon = ({
-  defaultClassName = "bi",
-  className = "",
-  children = "",
-  as = "i",
-  ...rest
-}) => {
-  const As = as;
-
-  return (
-    <As
-      className={[defaultClassName, className, `bi-${children}`]
-        .filter((value) => value)
-        .join(" ")}
-      {...rest}
-    ></As>
-  );
-};
-
 const Col = ({
   defaultClassName = "col",
   className = "",
@@ -417,9 +454,9 @@ const Col = ({
 };
 
 const Section = ({
-  defaultClassName = "p-3 text-bronze fw-bold rounded shadow-sm",
-  className = "",
   bg = "maroon",
+  defaultClassName = `text-nowrap bg-${bg} p-3 text-bronze fw-bold rounded shadow-sm`,
+  className = "",
   as = "div",
   ...rest
 }) => {
@@ -427,7 +464,7 @@ const Section = ({
 
   return (
     <As
-      className={[defaultClassName, className, `bg-${bg}`]
+      className={[defaultClassName, className]
         .filter((value) => value)
         .join(" ")}
       {...rest}
@@ -436,17 +473,17 @@ const Section = ({
 };
 
 const FlexColumn = ({
-  defaultClassName = "d-flex flex-column",
+  gap = 3,
+  defaultClassName = `d-flex flex-column gap-${gap}`,
   className = "",
   as = "div",
-  gap = 3,
   ...rest
 }) => {
   const As = as;
 
   return (
     <As
-      className={[defaultClassName, className, `gap-${gap}`]
+      className={[defaultClassName, className]
         .filter((value) => value)
         .join(" ")}
       {...rest}
@@ -455,23 +492,19 @@ const FlexColumn = ({
 };
 
 const FlexRow = ({
-  defaultClassName = "d-flex flex-row align-items-center justify-content-center",
+  alignItems = "center",
+  gap = 3,
+  defaultClassName = `d-flex gap-${gap} flex-row align-items-${alignItems} justify-content-center`,
   className = "",
   wrap = false,
   as = "div",
-  gap = 3,
   ...rest
 }) => {
   const As = as;
 
   return (
     <As
-      className={[
-        defaultClassName,
-        className,
-        wrap ? "flex-wrap" : "",
-        `gap-${gap}`,
-      ]
+      className={[defaultClassName, className]
         .filter((value) => value)
         .join(" ")}
       {...rest}

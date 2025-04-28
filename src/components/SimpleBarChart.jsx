@@ -1,4 +1,11 @@
-import { ResponsiveContainer, BarChart, XAxis, YAxis, Bar } from "recharts";
+import {
+  ResponsiveContainer,
+  LabelList,
+  BarChart,
+  XAxis,
+  YAxis,
+  Bar,
+} from "recharts";
 
 import { colors } from "../utils/colors";
 
@@ -23,6 +30,14 @@ export const SimpleBarChart = ({
 
   const chartData = Object.values(object);
 
+  const medianValue = findMedian(chartData.map(({ value }) => value));
+
+  const medianFilteredValue = findMedian(
+    chartData.map(({ filteredValue }) => filteredValue)
+  );
+
+  const label = showOriginalLabels ? renderCustomizedLabel : null;
+
   return (
     <ResponsiveContainer height={height} width="100%">
       <BarChart
@@ -40,19 +55,73 @@ export const SimpleBarChart = ({
           type="category"
           dataKey="name"
         />
+        <Bar fill={colorScheme.background} onClick={onClick} dataKey="value">
+          {showOriginalLabels && (
+            <LabelList
+              // content={renderCustomizedLabel}
+              position="right"
+              fill={textColor}
+            ></LabelList>
+          )}
+        </Bar>
         <Bar
-          label={showOriginalLabels && { position: "right", fill: textColor }}
-          fill={colorScheme.background}
-          onClick={onClick}
-          dataKey="value"
-        />
-        <Bar
-          label={{ position: "right", fill: textColor }}
           fill={colorScheme.foreground}
           dataKey="filteredValue"
           onClick={onClick}
-        />
+        >
+          <LabelList
+            // content={renderCustomizedLabel}
+            position="right"
+            fill={textColor}
+          ></LabelList>
+        </Bar>
       </BarChart>
     </ResponsiveContainer>
   );
 };
+
+const renderCustomizedLabel = (props) => {
+  console.log(props);
+
+  const {
+    // position = "",
+    height,
+    offset,
+    width,
+    value,
+    name,
+    fill,
+    x,
+    y,
+  } = props;
+
+  return (
+    <text
+      className="recharts-text recharts-label"
+      textAnchor="start"
+      height={height}
+      offset={offset}
+      width={width}
+      fill={fill}
+      name={name}
+      x={x}
+      y={y}
+    >
+      <tspan dy="0.355em" x={x}>
+        {value}
+      </tspan>
+    </text>
+  );
+};
+
+function findMedian(arr) {
+  const sortedArr = [...arr].sort((a, b) => a - b);
+  const len = sortedArr.length;
+  const mid = Math.floor(len / 2);
+
+  if (len % 2 === 0) {
+    return (sortedArr[mid - 1] + sortedArr[mid]) / 2;
+  } else {
+    return sortedArr[mid];
+  }
+}
