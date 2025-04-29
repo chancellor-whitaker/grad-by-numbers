@@ -1,5 +1,9 @@
 import { useVisualizationData } from "./hooks/useVisualizationData";
+import { ServiceRegionLink } from "./components/ServiceRegionLink";
+import { VerticalBarChart } from "./components/VerticalBarChart";
 import { ImageBackground } from "./components/ImageBackground";
+import { KYStatsLink } from "./components/KYStatsLink";
+import { colorSchemes } from "./utils/colorSchemes";
 import { imageWidths } from "./utils/imageWidths";
 import { fontSizes } from "./utils/fontSizes";
 import { HStack } from "./components/HStack";
@@ -11,72 +15,56 @@ import donate from "./assets/donate.png";
 import globe from "./assets/globe.png";
 import star from "./assets/star.png";
 
-// creates chart data context
-
 export default function App() {
-  const { data } = useVisualizationData();
+  const { filteredData } = useVisualizationData();
 
-  console.log(data);
+  console.log(filteredData);
 
+  const blocks = createBlocks(filteredData);
+
+  return (
+    <main className="container">
+      <div className="my-3">
+        <div className="bd-example-flex">
+          <VStack>
+            <HStack>
+              {blocks.awards}
+              <>
+                {blocks.firstGen}
+                {blocks.serviceReg}
+              </>
+              <>
+                {blocks.gpa}
+                {blocks.pell}
+                {blocks.age}
+              </>
+            </HStack>
+            <HStack>
+              {blocks.states}
+              {blocks.counties}
+              {blocks.majors}
+            </HStack>
+            <HStack>
+              {blocks.locations}
+              {blocks.work}
+              {blocks.salary}
+            </HStack>
+          </VStack>
+        </div>
+      </div>
+    </main>
+  );
+}
+
+const createBlocks = (data) => {
   const chartPlaceholder = <div style={{ height: 50 }}>Chart</div>;
 
-  const serviceRegionLink = (
-    <HStack className="small">
-      <></>
-      <div className="lh-1 ms-auto">
-        <a
-          href="https://www.irserver2.eku.edu/reports/serviceregion/"
-          className="link-light"
-          rel="noreferrer"
-          target="_blank"
-        >
-          EKU service region
-        </a>
-      </div>
-    </HStack>
-  );
-
-  const kyStatsSource = (
-    <HStack className="small">
-      <></>
-      <>
-        <div className="lh-1 text-white-50 ms-auto">
-          Source:{" "}
-          <a
-            className="link-light link-opacity-50 link-underline-opacity-50"
-            href="https://kystats.ky.gov/Reports/Tableau/2024_PSFR"
-            rel="noreferrer"
-            target="_blank"
-          >
-            KYSTATS
-          </a>
-        </div>
-        <div className="lh-1 text-white-50 ms-auto">(Non-filtering)</div>
-      </>
-    </HStack>
-  );
-
-  const titles = {
-    work: "Percent of graduates working in kentucky after 3 years",
-    salary: "Median salary 3 years after graduation",
-    locations: "Graduates represent",
-    gpa: "Average graduation gpa",
-    firstGen: "First generation",
-    serviceReg: "Service region",
-    pell: "Pell recipients",
-    counties: "Ky counties",
-    age: "Average age",
-    awards: "awards",
-    states: "States",
-    majors: "Majors",
-  };
-
-  const blocks = {
+  return {
     locations: (
       <Block>
         <HStack>
           <>
-            <Title>{titles.locations}</Title>
+            <Title>Graduates represent</Title>
             <Metric fontSize={fontSizes.tertiary} lineHeight={1}>
               {data.countries.amount} countries
             </Metric>
@@ -98,7 +86,7 @@ export default function App() {
         <HStack>
           <ImageBackground></ImageBackground>
           <>
-            <Title>{titles.age}</Title>
+            <Title>Average age</Title>
             <Metric>{data.age.average}</Metric>
           </>
           <>
@@ -117,12 +105,13 @@ export default function App() {
         <HStack>
           <ImageBackground width={imageWidths.awards}></ImageBackground>
           <div className="fw-bold">
-            <Metric as="span">{data.awards.amount}</Metric> {titles.awards}
+            <Metric as="span">{data.awards.amount}</Metric> awards
           </div>
           <></>
         </HStack>
-        {chartPlaceholder}
-        {chartPlaceholder}
+        <VerticalBarChart {...colorSchemes.maroon}></VerticalBarChart>
+        {/* {chartPlaceholder} */}
+        {/* {chartPlaceholder} */}
       </Block>
     ),
     serviceReg: (
@@ -130,25 +119,33 @@ export default function App() {
         <HStack>
           <></>
           <>
-            <Title>{titles.serviceReg}</Title>
+            <Title>Service region</Title>
             {chartPlaceholder}
           </>
           <></>
         </HStack>
         <div className="mt-auto"></div>
-        {serviceRegionLink}
+        <ServiceRegionLink></ServiceRegionLink>
       </Block>
     ),
-    pell: (
-      <Block>
-        <HStack>
-          <ImageBackground>{donate}</ImageBackground>
-          <>
-            <Title>{titles.pell}</Title>
-            <Metric>{data.pell.amount}</Metric>
-          </>
-          <></>
-        </HStack>
+    work: (
+      <Block textWrap>
+        <Title>Percent of graduates working in kentucky after 3 years</Title>
+        <Metric>
+          62.5 <span className="text-white-50">%</span>
+        </Metric>
+        <div className="mt-auto"></div>
+        <KYStatsLink></KYStatsLink>
+      </Block>
+    ),
+    salary: (
+      <Block textWrap>
+        <Title>Median salary 3 years after graduation</Title>
+        <Metric>
+          <span className="text-white-50">$</span> 43,875
+        </Metric>
+        <div className="mt-auto"></div>
+        <KYStatsLink></KYStatsLink>
       </Block>
     ),
     gpa: (
@@ -156,55 +153,47 @@ export default function App() {
         <HStack>
           <ImageBackground>{star}</ImageBackground>
           <>
-            <Title>{titles.gpa}</Title>
+            <Title>Average graduation gpa</Title>
             <Metric>{data.gpa.average}</Metric>
           </>
           <></>
         </HStack>
       </Block>
     ),
-    salary: (
-      <Block textWrap>
-        <Title>{titles.salary}</Title>
-        <Metric>
-          <span className="text-white-50">$</span> 43,875
-        </Metric>
-        <div className="mt-auto"></div>
-        {kyStatsSource}
-      </Block>
-    ),
-    work: (
-      <Block textWrap>
-        <Title>{titles.work}</Title>
-        <Metric>
-          62.5 <span className="text-white-50">%</span>
-        </Metric>
-        <div className="mt-auto"></div>
-        {kyStatsSource}
+    pell: (
+      <Block>
+        <HStack>
+          <ImageBackground>{donate}</ImageBackground>
+          <>
+            <Title>Pell recipients</Title>
+            <Metric>{data.pell.amount}</Metric>
+          </>
+          <></>
+        </HStack>
       </Block>
     ),
     counties: (
       <Block backgroundColor="lightgray" color="secondary">
         <Title fontSize={fontSizes.tertiary} textAlign="start">
-          {titles.counties}
+          Ky counties
         </Title>
-        {chartPlaceholder}
+        <VerticalBarChart {...colorSchemes.darkGray}></VerticalBarChart>
       </Block>
     ),
     states: (
       <Block backgroundColor="lightgray" color="secondary">
         <Title fontSize={fontSizes.tertiary} textAlign="start">
-          {titles.states}
+          States
         </Title>
-        {chartPlaceholder}
+        <VerticalBarChart {...colorSchemes.darkGray}></VerticalBarChart>
       </Block>
     ),
     majors: (
       <Block backgroundColor="lightgray" color="secondary">
         <Title fontSize={fontSizes.tertiary} textAlign="start">
-          {titles.majors}
+          Majors
         </Title>
-        {chartPlaceholder}
+        <VerticalBarChart {...colorSchemes.darkGray}></VerticalBarChart>
       </Block>
     ),
     firstGen: (
@@ -212,7 +201,7 @@ export default function App() {
         <HStack>
           <></>
           <>
-            <Title>{titles.firstGen}</Title>
+            <Title>First generation</Title>
             {chartPlaceholder}
           </>
           <></>
@@ -220,39 +209,4 @@ export default function App() {
       </Block>
     ),
   };
-
-  return (
-    <>
-      <main className="container">
-        <div className="my-3">
-          <div className="bd-example-flex">
-            <VStack>
-              <HStack>
-                {blocks.awards}
-                <>
-                  {blocks.firstGen}
-                  {blocks.serviceReg}
-                </>
-                <>
-                  {blocks.gpa}
-                  {blocks.pell}
-                  {blocks.age}
-                </>
-              </HStack>
-              <HStack>
-                {blocks.states}
-                {blocks.counties}
-                {blocks.majors}
-              </HStack>
-              <HStack>
-                {blocks.locations}
-                {blocks.work}
-                {blocks.salary}
-              </HStack>
-            </VStack>
-          </div>
-        </div>
-      </main>
-    </>
-  );
-}
+};
