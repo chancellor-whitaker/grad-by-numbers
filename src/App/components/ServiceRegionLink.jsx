@@ -1,8 +1,10 @@
 import { HStack } from "./HStack";
 
-export const ServiceRegionLink = () => {
+export const ServiceRegionLink = ({ className = "" }) => {
   return (
-    <HStack className="small">
+    <HStack
+      className={["small", className].filter((string) => string).join(" ")}
+    >
       <></>
       <div className="lh-1 ms-auto">
         <a

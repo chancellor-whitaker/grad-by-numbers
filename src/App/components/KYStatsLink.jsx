@@ -1,8 +1,10 @@
 import { HStack } from "./HStack";
 
-export const KYStatsLink = () => {
+export const KYStatsLink = ({ className = "" }) => {
   return (
-    <HStack className="small">
+    <HStack
+      className={["small", className].filter((string) => string).join(" ")}
+    >
       <></>
       <>
         <div className="lh-1 text-white-50 ms-auto">
