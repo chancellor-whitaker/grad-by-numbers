@@ -1,6 +1,11 @@
+import { defaultGap } from "../utils/defaultGap";
 import { VStack } from "./VStack";
 
-export const HStack = ({ className = "", children, gap = 2 }) => {
+export const HStack = ({
+  gap = defaultGap.horizontal,
+  className = "",
+  children,
+}) => {
   const columns = [children]
     .filter((child) => child)
     .flat()

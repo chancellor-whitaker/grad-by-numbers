@@ -59,6 +59,31 @@ export default function App() {
 
 const createBlocks = (data) => {
   return {
+    awards: (
+      <Block>
+        <HStack className="mt-auto">
+          <ImageBackground width={imageWidths.awards}></ImageBackground>
+          <div className="fw-bold">
+            <Metric as="span">{`${data.awards.amount}`}</Metric> awards
+          </div>
+          <></>
+        </HStack>
+        <div className="position-relative mb-auto">
+          <VerticalBarChart
+            data={data.awards.data}
+            {...colorSchemes.maroon}
+          ></VerticalBarChart>
+          <div className="position-absolute bottom-0 end-0 w-100">
+            <SimplePieChart
+              // style={{ width: "fit-content" }}
+              data={data.level.data}
+              className="ms-auto"
+              width="50%"
+            ></SimplePieChart>
+          </div>
+        </div>
+      </Block>
+    ),
     locations: (
       <Block>
         <HStack className="my-auto">
@@ -99,19 +124,6 @@ const createBlocks = (data) => {
         </HStack>
       </Block>
     ),
-    awards: (
-      <Block>
-        <HStack className="mt-auto">
-          <ImageBackground width={imageWidths.awards}></ImageBackground>
-          <div className="fw-bold">
-            <Metric as="span">{`${data.awards.amount}`}</Metric> awards
-          </div>
-          <></>
-        </HStack>
-        <VerticalBarChart {...colorSchemes.maroon}></VerticalBarChart>
-        <SimplePieChart className="mb-auto"></SimplePieChart>
-      </Block>
-    ),
     counties: (
       <Block backgroundColor="lightgray" color="secondary">
         <Title
@@ -122,6 +134,7 @@ const createBlocks = (data) => {
           Ky counties
         </Title>
         <VerticalBarChart
+          data={data.counties.data}
           className="mb-auto"
           {...colorSchemes.darkGray}
         ></VerticalBarChart>
@@ -137,6 +150,7 @@ const createBlocks = (data) => {
           States
         </Title>
         <VerticalBarChart
+          data={data.states.data}
           className="mb-auto"
           {...colorSchemes.darkGray}
         ></VerticalBarChart>
@@ -152,6 +166,7 @@ const createBlocks = (data) => {
           Majors
         </Title>
         <VerticalBarChart
+          data={data.majors.data}
           className="mb-auto"
           {...colorSchemes.darkGray}
         ></VerticalBarChart>
@@ -163,12 +178,12 @@ const createBlocks = (data) => {
           <></>
           <>
             <Title>Service region</Title>
-            <SimplePieChart></SimplePieChart>
+            <SimplePieChart data={data.serviceReg.data}></SimplePieChart>
           </>
           <></>
         </HStack>
-        <div className="mt-auto"></div>
-        <ServiceRegionLink></ServiceRegionLink>
+        {/* <div className="mt-auto"></div> */}
+        <ServiceRegionLink className="mb-auto"></ServiceRegionLink>
       </Block>
     ),
     work: (
@@ -179,8 +194,8 @@ const createBlocks = (data) => {
         <Metric>
           62.5 <span className="text-white-50">%</span>
         </Metric>
-        <div className="mt-auto"></div>
-        <KYStatsLink></KYStatsLink>
+        {/* <div className="mt-auto"></div> */}
+        <KYStatsLink className="mb-auto"></KYStatsLink>
       </Block>
     ),
     salary: (
@@ -191,8 +206,8 @@ const createBlocks = (data) => {
         <Metric>
           <span className="text-white-50">$</span> 43,875
         </Metric>
-        <div className="mt-auto"></div>
-        <KYStatsLink></KYStatsLink>
+        {/* <div className="mt-auto"></div> */}
+        <KYStatsLink className="mb-auto"></KYStatsLink>
       </Block>
     ),
     gpa: (
@@ -225,7 +240,7 @@ const createBlocks = (data) => {
           <></>
           <>
             <Title>First generation</Title>
-            <SimplePieChart></SimplePieChart>
+            <SimplePieChart data={data.firstGen.data}></SimplePieChart>
           </>
           <></>
         </HStack>

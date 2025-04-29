@@ -1,6 +1,6 @@
 import { ResponsiveContainer, BarChart, XAxis, YAxis, Bar } from "recharts";
 
-const data = [
+const defaultData = [
   {
     name: "Page A",
     value: 2400,
@@ -50,11 +50,17 @@ export const VerticalBarChart = ({
   numericalDataKey = "value",
   textColor = "white",
   barColor = "green",
+  data = defaultData,
   className = "",
+  width = "100%",
   height = 250,
 }) => {
   return (
-    <ResponsiveContainer className={className} height={height} width="100%">
+    <ResponsiveContainer
+      className={["small", className].filter((string) => string).join(" ")}
+      height={height}
+      width={width}
+    >
       <BarChart layout="vertical" data={data}>
         <XAxis dataKey={numericalDataKey} type="number" hide />
         <YAxis
@@ -65,7 +71,7 @@ export const VerticalBarChart = ({
           type="category"
         />
         <Bar
-          label={{ position: "insideRight", fill: textColor }}
+          label={{ position: "right", fill: textColor }}
           dataKey={numericalDataKey}
           fill={barColor}
         />

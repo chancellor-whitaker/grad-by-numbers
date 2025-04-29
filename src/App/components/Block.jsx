@@ -6,7 +6,7 @@ export const Block = ({
   color = "bronze",
   className = "",
   shadow = "sm",
-  padding = 2,
+  padding = 3,
   rounded = 4,
   textWrap,
 }) => {

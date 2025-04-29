@@ -107,13 +107,6 @@ const summarizeData = (data) => {
 };
 
 const getVizData = (summary) => ({
-  level: {
-    data: getChartData(summary, "SHRDGMR_LEVL_CODE", true).map(
-      ({ value, ...rest }) => ({ value: roundToTwo(value, 4), ...rest })
-    ),
-    field: "SHRDGMR_LEVL_CODE",
-    chart: "pie",
-  },
   age: {
     average: Math.floor(summary["Age"]?.average),
     max: Math.floor(summary["Age"]?.max),
@@ -121,12 +114,11 @@ const getVizData = (summary) => ({
     title: "Average Age",
     field: "Age",
   },
-  states: {
-    amount: getChartData(summary, "STATENAME").length,
-    data: getChartData(summary, "STATENAME"),
-    field: "STATENAME",
-    title: "States",
-    chart: "bar",
+  level: {
+    data: getChartData(summary, "SHRDGMR_LEVL_CODE", true).map(
+      ({ value, ...rest }) => ({ value: roundToTwo(value, 4), ...rest })
+    ),
+    field: "SHRDGMR_LEVL_CODE",
   },
   awards: {
     title: `${summary["acat_desc"]?.sum} Awards`,
@@ -146,6 +138,12 @@ const getVizData = (summary) => ({
     data: getChartData(summary, "COUNTYNM"),
     title: "KY Counties",
     field: "COUNTYNM",
+  },
+  states: {
+    amount: getChartData(summary, "STATENAME").length,
+    data: getChartData(summary, "STATENAME"),
+    field: "STATENAME",
+    title: "States",
   },
   gpa: {
     average: roundToTwo(summary["Overall_GPA_End_of_Term"]?.average),

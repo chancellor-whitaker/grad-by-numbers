@@ -1,6 +1,6 @@
 import { ResponsiveContainer, PieChart, Cell, Pie } from "recharts";
 
-const data = [
+const defaultData = [
   { name: "Group A", value: 400 },
   { name: "Group B", value: 300 },
   { name: "Group C", value: 300 },
@@ -39,13 +39,19 @@ const renderCustomizedLabel = ({
 export const SimplePieChart = ({
   //   categoricalDataKey = "name",
   numericalDataKey = "value",
+  data = defaultData,
   className = "",
+  width = "100%",
   //   textColor = "white",
   //   barColor = "green",
   height = 175,
 }) => {
   return (
-    <ResponsiveContainer className={className} height={height} width="100%">
+    <ResponsiveContainer
+      className={["small", className].filter((string) => string).join(" ")}
+      height={height}
+      width={width}
+    >
       <PieChart>
         <Pie
           label={renderCustomizedLabel}
