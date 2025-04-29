@@ -1,13 +1,13 @@
-import { imageWidths } from "../utils/imageWidths";
+// import { imageWidths } from "../utils/imageWidths";
 import scholar from "../assets/scholar.png";
 import donate from "../assets/donate.png";
 import globe from "../assets/globe.png";
 import star from "../assets/star.png";
 
 export const ImageBackground = ({
-  width = imageWidths.default,
   children = scholar,
-  height = getHeight(children, width),
+  height = 75,
+  width = getWidth(children, height),
   className = "me-auto",
 }) => {
   return (
@@ -26,13 +26,13 @@ export const ImageBackground = ({
   );
 };
 
-// const getWidth = (asset, x = 75) => {
-//   return x * getAspectRatio(asset);
-// };
-
-const getHeight = (asset, x = imageWidths.default) => {
-  return x * getAspectRatio(asset, true);
+const getWidth = (asset, x = 75) => {
+  return x * getAspectRatio(asset);
 };
+
+// const getHeight = (asset, x = imageWidths.default) => {
+//   return x * getAspectRatio(asset, true);
+// };
 
 const getAspectRatio = (asset, findingHeight) => {
   const assets = [star, donate, scholar, globe];

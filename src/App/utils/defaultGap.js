@@ -1,1 +1,1 @@
-export const defaultGap = { horizontal: 3, vertical: 3 };
+export const defaultGap = { horizontal: 2, vertical: 2 };

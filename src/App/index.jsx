@@ -1,5 +1,5 @@
+import { ChartScrollContainer } from "./components/ChartScrollContainer";
 import { useVisualizationData } from "./hooks/useVisualizationData";
-import { ServiceRegionLink } from "./components/ServiceRegionLink";
 import { VerticalBarChart } from "./components/VerticalBarChart";
 import { ImageBackground } from "./components/ImageBackground";
 import { SimplePieChart } from "./components/SimplePieChart";
@@ -28,7 +28,18 @@ export default function App() {
       <div className="my-3">
         <div className="bd-example-flex">
           <VStack>
+            <HStack>{blocks.awards}</HStack>
             <HStack>
+              {blocks.level}
+              {blocks.firstGen}
+              {blocks.serviceReg}
+            </HStack>
+            <HStack>
+              {blocks.gpa}
+              {blocks.pell}
+              {blocks.age}
+            </HStack>
+            {/* <HStack>
               {blocks.awards}
               <>
                 {blocks.firstGen}
@@ -39,7 +50,7 @@ export default function App() {
                 {blocks.pell}
                 {blocks.age}
               </>
-            </HStack>
+            </HStack> */}
             <HStack>
               {blocks.states}
               {blocks.counties}
@@ -57,49 +68,99 @@ export default function App() {
   );
 }
 
+// bar chart text not overflowing, scholar icon not w-100, & x overflow in scrollable charts
+// baccalaureate--bachelors
+// masters degree--masters
+// remove "degree" & abbreviate "certificate"
+// format numbers
+// add tooltips back
+// different text color on pie charts (white doesn't show well)
+
 const createBlocks = (data) => {
   return {
     awards: (
       <Block>
-        <HStack className="mt-auto">
+        {/* <HStack>
           <ImageBackground width={imageWidths.awards}></ImageBackground>
           <div className="fw-bold">
-            <Metric as="span">{`${data.awards.amount}`}</Metric> awards
+            <Metric as="span">{data.awards.amount}</Metric> awards
           </div>
           <></>
-        </HStack>
-        <div className="position-relative mb-auto">
-          <VerticalBarChart
-            data={data.awards.data}
-            {...colorSchemes.maroon}
-          ></VerticalBarChart>
-          <div className="position-absolute bottom-0 end-0 w-100">
-            <SimplePieChart
-              // style={{ width: "fit-content" }}
-              data={data.level.data}
-              className="ms-auto"
-              width="50%"
-            ></SimplePieChart>
+        </HStack> */}
+        <HStack>
+          <>
+            <ImageBackground height={200} className=""></ImageBackground>
+          </>
+          <div className="position-relative w-100">
+            <VerticalBarChart
+              data={data.awards.data}
+              {...colorSchemes.maroon}
+            ></VerticalBarChart>
+            <div className="position-absolute bottom-0 end-0">
+              <div>
+                <Metric displayFontSize={2} className="me-3" as="span">
+                  {data.awards.amount}
+                </Metric>
+                <span className="display-2 fw-bold">Awards</span>
+              </div>
+            </div>
           </div>
-        </div>
+          {/* <div className="position-relative">
+            <VerticalBarChart
+              data={data.awards.data}
+              {...colorSchemes.maroon}
+            ></VerticalBarChart>
+            <div className="position-absolute bottom-0 end-0 w-100">
+              <SimplePieChart
+                data={data.level.data}
+                className="ms-auto"
+                width="50%"
+              ></SimplePieChart>
+            </div>
+          </div> */}
+        </HStack>
+      </Block>
+    ),
+    serviceReg: (
+      <Block>
+        <HStack>
+          <></>
+          <>
+            <Title>Service Region</Title>
+            <SimplePieChart data={data.serviceReg.data}></SimplePieChart>
+          </>
+          <>
+            <div className="small lh-sm ms-auto mt-auto text-wrap text-end">
+              <a
+                href="https://www.irserver2.eku.edu/reports/serviceregion/"
+                className="link-light"
+                rel="noreferrer"
+                target="_blank"
+              >
+                EKU Service Region
+              </a>
+            </div>
+          </>
+        </HStack>
+        {/* <ServiceRegionLink></ServiceRegionLink> */}
       </Block>
     ),
     locations: (
       <Block>
-        <HStack className="my-auto">
+        <HStack>
           <>
             <Title>Graduates represent</Title>
             <Metric fontSize={fontSizes.tertiary} lineHeight={1}>
-              {`${data.countries.amount}`} countries
+              {data.countries.amount} Countries
             </Metric>
             <Metric fontSize={fontSizes.tertiary} lineHeight={1}>
-              {`${data.states.amount}`} states
+              {data.states.amount} States
             </Metric>
             <Metric fontSize={fontSizes.tertiary} lineHeight={1}>
-              {`${data.counties.amount}`} counties
+              {data.counties.amount} Counties
             </Metric>
           </>
-          <ImageBackground width={imageWidths.locations} className="">
+          <ImageBackground height={175} className="">
             {globe}
           </ImageBackground>
         </HStack>
@@ -107,18 +168,18 @@ const createBlocks = (data) => {
     ),
     age: (
       <Block>
-        <HStack className="my-auto">
+        <HStack>
           <ImageBackground></ImageBackground>
           <>
-            <Title>Average age</Title>
-            <Metric>{`${data.age.average}`}</Metric>
+            <Title>Average Age</Title>
+            <Metric>{data.age.average}</Metric>
           </>
           <>
             <div>
-              Min: <span className="text-white">{`${data.age.min}`}</span>
+              Min: <span className="text-white">{data.age.min}</span>
             </div>
             <div>
-              Max: <span className="text-white">{`${data.age.max}`}</span>
+              Max: <span className="text-white">{data.age.max}</span>
             </div>
           </>
         </HStack>
@@ -126,97 +187,50 @@ const createBlocks = (data) => {
     ),
     counties: (
       <Block backgroundColor="lightgray" color="secondary">
-        <Title
-          fontSize={fontSizes.tertiary}
-          className="mt-auto"
-          textAlign="start"
-        >
-          Ky counties
+        <Title fontSize={fontSizes.tertiary} textAlign="start">
+          KY Counties
         </Title>
-        <VerticalBarChart
-          data={data.counties.data}
-          className="mb-auto"
-          {...colorSchemes.darkGray}
-        ></VerticalBarChart>
-      </Block>
-    ),
-    states: (
-      <Block backgroundColor="lightgray" color="secondary">
-        <Title
-          fontSize={fontSizes.tertiary}
-          className="mt-auto"
-          textAlign="start"
-        >
-          States
-        </Title>
-        <VerticalBarChart
-          data={data.states.data}
-          className="mb-auto"
-          {...colorSchemes.darkGray}
-        ></VerticalBarChart>
+        <ChartScrollContainer>
+          <VerticalBarChart
+            data={data.counties.data}
+            {...colorSchemes.darkGray}
+          ></VerticalBarChart>
+        </ChartScrollContainer>
       </Block>
     ),
     majors: (
       <Block backgroundColor="lightgray" color="secondary">
-        <Title
-          fontSize={fontSizes.tertiary}
-          className="mt-auto"
-          textAlign="start"
-        >
+        <Title fontSize={fontSizes.tertiary} textAlign="start">
           Majors
         </Title>
-        <VerticalBarChart
-          data={data.majors.data}
-          className="mb-auto"
-          {...colorSchemes.darkGray}
-        ></VerticalBarChart>
+        <ChartScrollContainer>
+          <VerticalBarChart
+            data={data.majors.data}
+            {...colorSchemes.darkGray}
+          ></VerticalBarChart>
+        </ChartScrollContainer>
       </Block>
     ),
-    serviceReg: (
-      <Block>
-        <HStack className="mt-auto">
-          <></>
-          <>
-            <Title>Service region</Title>
-            <SimplePieChart data={data.serviceReg.data}></SimplePieChart>
-          </>
-          <></>
-        </HStack>
-        {/* <div className="mt-auto"></div> */}
-        <ServiceRegionLink className="mb-auto"></ServiceRegionLink>
-      </Block>
-    ),
-    work: (
-      <Block textWrap>
-        <Title className="mt-auto">
-          Percent of graduates working in kentucky after 3 years
+    states: (
+      <Block backgroundColor="lightgray" color="secondary">
+        <Title fontSize={fontSizes.tertiary} textAlign="start">
+          States
         </Title>
-        <Metric>
-          62.5 <span className="text-white-50">%</span>
-        </Metric>
-        {/* <div className="mt-auto"></div> */}
-        <KYStatsLink className="mb-auto"></KYStatsLink>
-      </Block>
-    ),
-    salary: (
-      <Block textWrap>
-        <Title className="mt-auto">
-          Median salary 3 years after graduation
-        </Title>
-        <Metric>
-          <span className="text-white-50">$</span> 43,875
-        </Metric>
-        {/* <div className="mt-auto"></div> */}
-        <KYStatsLink className="mb-auto"></KYStatsLink>
+        <ChartScrollContainer>
+          <VerticalBarChart
+            data={data.states.data}
+            {...colorSchemes.darkGray}
+          ></VerticalBarChart>
+        </ChartScrollContainer>
       </Block>
     ),
     gpa: (
       <Block>
-        <HStack className="my-auto">
+        <HStack>
           <ImageBackground>{star}</ImageBackground>
           <>
-            <Title>Average graduation gpa</Title>
-            <Metric>{`${data.gpa.average}`}</Metric>
+            <Title>Average Graduation GPA</Title>
+            <Metric>{data.gpa.average}</Metric>
           </>
           <></>
         </HStack>
@@ -224,11 +238,11 @@ const createBlocks = (data) => {
     ),
     pell: (
       <Block>
-        <HStack className="my-auto">
+        <HStack>
           <ImageBackground>{donate}</ImageBackground>
           <>
-            <Title>Pell recipients</Title>
-            <Metric>{`${data.pell.amount}`}</Metric>
+            <Title>Pell Recipients</Title>
+            <Metric>{data.pell.amount}</Metric>
           </>
           <></>
         </HStack>
@@ -236,11 +250,41 @@ const createBlocks = (data) => {
     ),
     firstGen: (
       <Block>
-        <HStack className="my-auto">
+        <HStack>
           <></>
           <>
-            <Title>First generation</Title>
+            <Title>First Generation</Title>
             <SimplePieChart data={data.firstGen.data}></SimplePieChart>
+          </>
+          <></>
+        </HStack>
+      </Block>
+    ),
+    work: (
+      <Block textWrap>
+        <Title>Percent of graduates working in kentucky after 3 years</Title>
+        <Metric>
+          62.5 <span className="text-white-50">%</span>
+        </Metric>
+        <KYStatsLink></KYStatsLink>
+      </Block>
+    ),
+    salary: (
+      <Block textWrap>
+        <Title>Median salary 3 years after graduation</Title>
+        <Metric>
+          <span className="text-white-50">$</span> 43,875
+        </Metric>
+        <KYStatsLink></KYStatsLink>
+      </Block>
+    ),
+    level: (
+      <Block>
+        <HStack>
+          <></>
+          <>
+            <Title>Level</Title>
+            <SimplePieChart data={data.level.data}></SimplePieChart>
           </>
           <></>
         </HStack>

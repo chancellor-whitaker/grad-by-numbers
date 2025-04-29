@@ -5,6 +5,7 @@ export const Metric = ({
   textAlign = "center",
   fontWeight = "bold",
   color = "white",
+  displayFontSize,
   lineHeight = 1,
   className = "",
   as = "div",
@@ -15,8 +16,9 @@ export const Metric = ({
   return (
     <As
       className={[
-        `lh-${lineHeight} text-${textAlign} fs-${fontSize} text-${color} fw-${fontWeight}`,
+        `lh-${lineHeight} text-${textAlign} text-${color} fw-${fontWeight}`,
         className,
+        displayFontSize ? `display-${displayFontSize}` : `fs-${fontSize}`,
       ]
         .filter((string) => string)
         .join(" ")}

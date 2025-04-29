@@ -1,10 +1,8 @@
-import { fontSizes } from "../utils/fontSizes";
-
 export const Title = ({
-  fontSize = fontSizes.primary,
   textAlign = "center",
   fontWeight = "bold",
   className = "",
+  fontSize = 5,
   children,
 }) => {
   return (

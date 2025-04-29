@@ -53,12 +53,12 @@ export const VerticalBarChart = ({
   data = defaultData,
   className = "",
   width = "100%",
-  height = 250,
+  // height = 250,
 }) => {
   return (
     <ResponsiveContainer
       className={["small", className].filter((string) => string).join(" ")}
-      height={height}
+      height={data.length * 45}
       width={width}
     >
       <BarChart layout="vertical" data={data}>

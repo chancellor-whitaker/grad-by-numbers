@@ -6,6 +6,8 @@ export const Block = ({
   color = "bronze",
   className = "",
   shadow = "sm",
+  // mbAuto = true,
+  // mtAuto = true,
   padding = 3,
   rounded = 4,
   textWrap,
@@ -13,14 +15,16 @@ export const Block = ({
   return (
     <VStack
       className={[
-        `bg-${backgroundColor} text-${color} rounded-${rounded} shadow-${shadow} p-${padding}`,
+        `bg-${backgroundColor} text-${color} rounded-${rounded} shadow-${shadow} px-3 py-2`,
         textWrap ? "text-wrap" : "text-nowrap",
         className,
       ]
         .filter((string) => string)
         .join(" ")}
     >
+      <div className="mb-auto"></div>
       {children}
+      <div className="mt-auto"></div>
     </VStack>
   );
 };
