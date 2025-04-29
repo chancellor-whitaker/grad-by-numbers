@@ -1,5 +1,7 @@
 import { ResponsiveContainer, PieChart, Cell, Pie } from "recharts";
 
+import { ekuColors } from "../utils/ekuColors";
+
 const defaultData = [
   { name: "Group A", value: 400 },
   { name: "Group B", value: 300 },
@@ -7,7 +9,11 @@ const defaultData = [
   { name: "Group D", value: 200 },
 ];
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+const COLORS = [
+  ekuColors.goldenrodYellow,
+  ekuColors.autumnOrange,
+  ekuColors.kentuckyBluegrass,
+];
 
 const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({
@@ -37,15 +43,23 @@ const renderCustomizedLabel = ({
 };
 
 export const SimplePieChart = ({
-  //   categoricalDataKey = "name",
+  data: unsortedData = defaultData,
+  categoricalDataKey = "name",
   numericalDataKey = "value",
-  data = defaultData,
   className = "",
   width = "100%",
   //   textColor = "white",
   //   barColor = "green",
   height = 175,
 }) => {
+  const names = unsortedData
+    .map(({ [categoricalDataKey]: name }) => name)
+    .sort();
+
+  const data = names.map((string) =>
+    unsortedData.find(({ [categoricalDataKey]: name }) => name === string)
+  );
+
   return (
     <ResponsiveContainer
       className={["small", className].filter((string) => string).join(" ")}
