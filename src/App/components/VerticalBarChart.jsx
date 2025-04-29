@@ -65,7 +65,7 @@ export const VerticalBarChart = ({
           type="category"
         />
         <Bar
-          label={{ fill: textColor }}
+          label={{ position: "insideRight", fill: textColor }}
           dataKey={numericalDataKey}
           fill={barColor}
         />

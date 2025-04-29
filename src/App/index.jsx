@@ -167,8 +167,8 @@ const createBlocks = (data) => {
           </>
           <></>
         </HStack>
-        {/* <div className="mt-auto"></div> */}
-        <ServiceRegionLink className="mb-auto"></ServiceRegionLink>
+        <div className="mt-auto"></div>
+        <ServiceRegionLink></ServiceRegionLink>
       </Block>
     ),
     work: (
@@ -179,8 +179,8 @@ const createBlocks = (data) => {
         <Metric>
           62.5 <span className="text-white-50">%</span>
         </Metric>
-        {/* <div className="mt-auto"></div> */}
-        <KYStatsLink className="mb-auto"></KYStatsLink>
+        <div className="mt-auto"></div>
+        <KYStatsLink></KYStatsLink>
       </Block>
     ),
     salary: (
@@ -191,8 +191,8 @@ const createBlocks = (data) => {
         <Metric>
           <span className="text-white-50">$</span> 43,875
         </Metric>
-        {/* <div className="mt-auto"></div> */}
-        <KYStatsLink className="mb-auto"></KYStatsLink>
+        <div className="mt-auto"></div>
+        <KYStatsLink></KYStatsLink>
       </Block>
     ),
     gpa: (

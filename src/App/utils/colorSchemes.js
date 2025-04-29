@@ -3,7 +3,7 @@ import { ekuColors } from "./ekuColors";
 export const colorSchemes = {
   darkGray: {
     barColor: ekuColors.kentuckyBluegrass,
-    textColor: "#6c757d",
+    textColor: "#f8f9fa",
   },
   maroon: {
     barColor: ekuColors.goldenrodYellow,
