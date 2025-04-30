@@ -65,9 +65,14 @@ export default function App() {
 // * different text color on pie charts (white doesn't show well)
 // * add tooltips back
 // * format numbers
+// try to get x axis ticks to stop wrapping (could add margin to both ends of bar charts to prevent tick wrapping)
 // wrapping
 // x overflow in scrollable charts
-// fix pie chart labels (added rect bg to labels)
+// fix pie chart labels (added rect bg to labels) (can then remove tooltip on pie charts)
+// could maybe turn tooltips off of bar charts
+// could shrink Undergrad to UG & Grad to GR
+// make filtering operational again
+// might change bg colors of certain rows
 
 const createBlocks = (data) => {
   return {
