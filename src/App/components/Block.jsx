@@ -6,9 +6,6 @@ export const Block = ({
   color = "bronze",
   className = "",
   shadow = "sm",
-  // mbAuto = true,
-  // mtAuto = true,
-  padding = 3,
   rounded = 4,
   textWrap,
 }) => {

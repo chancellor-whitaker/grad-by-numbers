@@ -1,11 +1,12 @@
 import { ChartScrollContainer } from "./components/ChartScrollContainer";
+import { formatTwoDecimalPlaces } from "./utils/formatTwoDecimalPlaces";
+import { defaultValueFormatter } from "./utils/defaultValueFormatter";
 import { useVisualizationData } from "./hooks/useVisualizationData";
 import { VerticalBarChart } from "./components/VerticalBarChart";
 import { ImageBackground } from "./components/ImageBackground";
 import { SimplePieChart } from "./components/SimplePieChart";
 import { KYStatsLink } from "./components/KYStatsLink";
 import { colorSchemes } from "./utils/colorSchemes";
-import { imageWidths } from "./utils/imageWidths";
 import { fontSizes } from "./utils/fontSizes";
 import { HStack } from "./components/HStack";
 import { Metric } from "./components/Metric";
@@ -19,7 +20,7 @@ import star from "./assets/star.png";
 export default function App() {
   const { filteredData } = useVisualizationData();
 
-  console.log(filteredData);
+  // console.log(filteredData);
 
   const blocks = createBlocks(filteredData);
 
@@ -39,18 +40,6 @@ export default function App() {
               {blocks.pell}
               {blocks.age}
             </HStack>
-            {/* <HStack>
-              {blocks.awards}
-              <>
-                {blocks.firstGen}
-                {blocks.serviceReg}
-              </>
-              <>
-                {blocks.gpa}
-                {blocks.pell}
-                {blocks.age}
-              </>
-            </HStack> */}
             <HStack>
               {blocks.states}
               {blocks.counties}
@@ -68,26 +57,22 @@ export default function App() {
   );
 }
 
-// bar chart text not overflowing, scholar icon not w-100, & x overflow in scrollable charts
-// baccalaureate--bachelors
-// masters degree--masters
-// remove "degree" & abbreviate "certificate"
+// ? baccalaureate--bachelors
+// * scholar icon not w-100,
+// * masters degree--masters
+// * remove "degree"
+// * abbreviate "certificate"
+// * different text color on pie charts (white doesn't show well)
 // format numbers
 // add tooltips back
-// different text color on pie charts (white doesn't show well)
+// wrapping
+// x overflow in scrollable charts
 
 const createBlocks = (data) => {
   return {
     awards: (
       <Block>
-        {/* <HStack>
-          <ImageBackground width={imageWidths.awards}></ImageBackground>
-          <div className="fw-bold">
-            <Metric as="span">{data.awards.amount}</Metric> awards
-          </div>
-          <></>
-        </HStack> */}
-        <HStack>
+        <HStack columnWidths={"auto"}>
           <>
             <ImageBackground height={200} className=""></ImageBackground>
           </>
@@ -99,25 +84,58 @@ const createBlocks = (data) => {
             <div className="position-absolute bottom-0 end-0">
               <div>
                 <Metric displayFontSize={2} className="me-3" as="span">
-                  {data.awards.amount}
+                  {defaultValueFormatter(data.awards.amount)}
                 </Metric>
                 <span className="display-2 fw-bold">Awards</span>
               </div>
             </div>
           </div>
-          {/* <div className="position-relative">
-            <VerticalBarChart
-              data={data.awards.data}
-              {...colorSchemes.maroon}
-            ></VerticalBarChart>
-            <div className="position-absolute bottom-0 end-0 w-100">
-              <SimplePieChart
-                data={data.level.data}
-                className="ms-auto"
-                width="50%"
-              ></SimplePieChart>
+        </HStack>
+      </Block>
+    ),
+    locations: (
+      <Block>
+        <HStack>
+          <>
+            <Title>Graduates represent</Title>
+            <Metric fontSize={fontSizes.tertiary} lineHeight={1}>
+              {defaultValueFormatter(data.countries.amount)} Countries
+            </Metric>
+            <Metric fontSize={fontSizes.tertiary} lineHeight={1}>
+              {defaultValueFormatter(data.states.amount)} States
+            </Metric>
+            <Metric fontSize={fontSizes.tertiary} lineHeight={1}>
+              {defaultValueFormatter(data.counties.amount)} Counties
+            </Metric>
+          </>
+          <ImageBackground height={175} className="">
+            {globe}
+          </ImageBackground>
+        </HStack>
+      </Block>
+    ),
+    age: (
+      <Block>
+        <HStack>
+          <ImageBackground></ImageBackground>
+          <>
+            <Title>Average Age</Title>
+            <Metric>{defaultValueFormatter(data.age.average)}</Metric>
+          </>
+          <>
+            <div>
+              Min:{" "}
+              <span className="text-white">
+                {defaultValueFormatter(data.age.min)}
+              </span>
             </div>
-          </div> */}
+            <div>
+              Max:{" "}
+              <span className="text-white">
+                {defaultValueFormatter(data.age.max)}
+              </span>
+            </div>
+          </>
         </HStack>
       </Block>
     ),
@@ -139,47 +157,6 @@ const createBlocks = (data) => {
               >
                 EKU Service Region
               </a>
-            </div>
-          </>
-        </HStack>
-        {/* <ServiceRegionLink></ServiceRegionLink> */}
-      </Block>
-    ),
-    locations: (
-      <Block>
-        <HStack>
-          <>
-            <Title>Graduates represent</Title>
-            <Metric fontSize={fontSizes.tertiary} lineHeight={1}>
-              {data.countries.amount} Countries
-            </Metric>
-            <Metric fontSize={fontSizes.tertiary} lineHeight={1}>
-              {data.states.amount} States
-            </Metric>
-            <Metric fontSize={fontSizes.tertiary} lineHeight={1}>
-              {data.counties.amount} Counties
-            </Metric>
-          </>
-          <ImageBackground height={175} className="">
-            {globe}
-          </ImageBackground>
-        </HStack>
-      </Block>
-    ),
-    age: (
-      <Block>
-        <HStack>
-          <ImageBackground></ImageBackground>
-          <>
-            <Title>Average Age</Title>
-            <Metric>{data.age.average}</Metric>
-          </>
-          <>
-            <div>
-              Min: <span className="text-white">{data.age.min}</span>
-            </div>
-            <div>
-              Max: <span className="text-white">{data.age.max}</span>
             </div>
           </>
         </HStack>
@@ -230,7 +207,7 @@ const createBlocks = (data) => {
           <ImageBackground>{star}</ImageBackground>
           <>
             <Title>Average Graduation GPA</Title>
-            <Metric>{data.gpa.average}</Metric>
+            <Metric>{formatTwoDecimalPlaces(data.gpa.average)}</Metric>
           </>
           <></>
         </HStack>
@@ -242,7 +219,7 @@ const createBlocks = (data) => {
           <ImageBackground>{donate}</ImageBackground>
           <>
             <Title>Pell Recipients</Title>
-            <Metric>{data.pell.amount}</Metric>
+            <Metric>{defaultValueFormatter(data.pell.amount)}</Metric>
           </>
           <></>
         </HStack>

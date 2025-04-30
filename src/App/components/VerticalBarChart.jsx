@@ -1,5 +1,8 @@
 import { ResponsiveContainer, BarChart, XAxis, YAxis, Bar } from "recharts";
 
+import { defaultValueFormatter } from "../utils/defaultValueFormatter";
+import { defaultNameFormatter } from "../utils/defaultNameFormatter";
+
 const defaultData = [
   {
     name: "Page A",
@@ -46,6 +49,8 @@ const defaultData = [
 ];
 
 export const VerticalBarChart = ({
+  valueFormatter = defaultValueFormatter,
+  nameFormatter = defaultNameFormatter,
   categoricalDataKey = "name",
   numericalDataKey = "value",
   textColor = "white",
@@ -55,6 +60,13 @@ export const VerticalBarChart = ({
   width = "100%",
   // height = 250,
 }) => {
+  const fieldFinder = Object.fromEntries(
+    data.map(({ field, name }) => [name, field])
+  );
+
+  const tickFormatter = (name) =>
+    nameFormatter({ field: fieldFinder[name], name });
+
   return (
     <ResponsiveContainer
       className={["small", className].filter((string) => string).join(" ")}
@@ -64,6 +76,7 @@ export const VerticalBarChart = ({
       <BarChart layout="vertical" data={data}>
         <XAxis dataKey={numericalDataKey} type="number" hide />
         <YAxis
+          tickFormatter={tickFormatter}
           dataKey={categoricalDataKey}
           stroke={textColor}
           axisLine={false}
@@ -71,7 +84,11 @@ export const VerticalBarChart = ({
           type="category"
         />
         <Bar
-          label={{ position: "right", fill: textColor }}
+          label={{
+            formatter: valueFormatter,
+            position: "right",
+            fill: textColor,
+          }}
           dataKey={numericalDataKey}
           fill={barColor}
         />

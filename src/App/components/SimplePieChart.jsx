@@ -33,7 +33,7 @@ const renderCustomizedLabel = ({
     <text
       textAnchor={x > cx ? "start" : "end"}
       dominantBaseline="central"
-      fill="white"
+      fill="#495057"
       x={x}
       y={y}
     >
@@ -72,7 +72,6 @@ export const SimplePieChart = ({
           dataKey={numericalDataKey}
           labelLine={false}
           outerRadius={75}
-          fill="#8884d8"
           data={data}
           cx="50%"
           cy="50%"
