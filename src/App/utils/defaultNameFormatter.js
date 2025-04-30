@@ -21,11 +21,11 @@ export const defaultNameFormatter = ({ field, name }) => {
     const words = name.split(" ");
 
     if (words.find((word) => word === "Certificate")) {
-      words[words.findIndex((word) => word === "Certificate")] = "Cert.";
+      words[words.findIndex((word) => word === "Certificate")] = "Cert";
     }
 
     if (words.find((word) => word === "certificate")) {
-      words[words.findIndex((word) => word === "certificate")] = "cert.";
+      words[words.findIndex((word) => word === "certificate")] = "cert";
     }
 
     const wordStartsWithLetter = (word) =>

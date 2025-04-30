@@ -67,6 +67,7 @@ export default function App() {
 // * format numbers
 // wrapping
 // x overflow in scrollable charts
+// fix pie chart labels (added rect bg to labels)
 
 const createBlocks = (data) => {
   return {
