@@ -1,5 +1,7 @@
-import { ResponsiveContainer, PieChart, Cell, Pie } from "recharts";
+import { ResponsiveContainer, PieChart, Tooltip, Cell, Pie } from "recharts";
 
+import { defaultValueFormatter } from "../utils/defaultValueFormatter";
+import { defaultNameFormatter } from "../utils/defaultNameFormatter";
 import { ekuColors } from "../utils/ekuColors";
 
 const defaultData = [
@@ -19,12 +21,18 @@ const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({
   innerRadius,
   outerRadius,
+  formatter,
   midAngle,
   percent,
-  //   index,
+  value,
+  name, //   index,
   cx,
   cy,
 }) => {
+  const formatted = [...formatter(value, name)].reverse().join(" : ");
+
+  console.log(formatted);
+
   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
   const y = cy + radius * Math.sin(-midAngle * RADIAN);
@@ -33,7 +41,7 @@ const renderCustomizedLabel = ({
     <text
       textAnchor={x > cx ? "start" : "end"}
       dominantBaseline="central"
-      fill="#495057"
+      fill="#343a40"
       x={x}
       y={y}
     >
@@ -43,13 +51,13 @@ const renderCustomizedLabel = ({
 };
 
 export const SimplePieChart = ({
+  valueFormatter = defaultValueFormatter,
+  nameFormatter = defaultNameFormatter,
   data: unsortedData = defaultData,
   categoricalDataKey = "name",
   numericalDataKey = "value",
   className = "",
   width = "100%",
-  //   textColor = "white",
-  //   barColor = "green",
   height = 175,
 }) => {
   const names = unsortedData
@@ -60,6 +68,18 @@ export const SimplePieChart = ({
     unsortedData.find(({ [categoricalDataKey]: name }) => name === string)
   );
 
+  const fieldFinder = Object.fromEntries(
+    data.map(({ field, name }) => [name, field])
+  );
+
+  const tickFormatter = (name) =>
+    nameFormatter({ field: fieldFinder[name], name });
+
+  const formatter = (value, name) => [
+    valueFormatter(value),
+    tickFormatter(name),
+  ];
+
   return (
     <ResponsiveContainer
       className={["small", className].filter((string) => string).join(" ")}
@@ -67,8 +87,9 @@ export const SimplePieChart = ({
       width={width}
     >
       <PieChart>
+        <Tooltip formatter={formatter}></Tooltip>
         <Pie
-          label={renderCustomizedLabel}
+          label={(props) => renderCustomizedLabel({ ...props, formatter })}
           dataKey={numericalDataKey}
           labelLine={false}
           outerRadius={75}

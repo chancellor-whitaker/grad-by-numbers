@@ -114,12 +114,6 @@ const getVizData = (summary) => ({
     title: "Average Age",
     field: "Age",
   },
-  level: {
-    data: getChartData(summary, "SHRDGMR_LEVL_CODE", true).map(
-      ({ value, ...rest }) => ({ value: roundToTwo(value, 4), ...rest })
-    ),
-    field: "SHRDGMR_LEVL_CODE",
-  },
   awards: {
     title: `${summary["acat_desc"]?.sum} Awards`,
     data: getChartData(summary, "acat_desc"),
@@ -164,6 +158,10 @@ const getVizData = (summary) => ({
     data: getChartData(summary, "major_desc"),
     field: "major_desc",
     title: "Majors",
+  },
+  level: {
+    data: getChartData(summary, "SHRDGMR_LEVL_CODE"),
+    field: "SHRDGMR_LEVL_CODE",
   },
   countries: {
     amount: getChartData(summary, "country").length,

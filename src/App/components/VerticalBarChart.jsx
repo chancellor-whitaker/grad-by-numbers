@@ -1,4 +1,11 @@
-import { ResponsiveContainer, BarChart, XAxis, YAxis, Bar } from "recharts";
+import {
+  ResponsiveContainer,
+  BarChart,
+  Tooltip,
+  XAxis,
+  YAxis,
+  Bar,
+} from "recharts";
 
 import { defaultValueFormatter } from "../utils/defaultValueFormatter";
 import { defaultNameFormatter } from "../utils/defaultNameFormatter";
@@ -83,6 +90,13 @@ export const VerticalBarChart = ({
           tickLine={false}
           type="category"
         />
+        <Tooltip
+          formatter={(value) => [valueFormatter(value), ""]}
+          labelStyle={{ color: "#343a40" }}
+          itemStyle={{ color: "#343a40" }}
+          labelFormatter={tickFormatter}
+          separator=""
+        ></Tooltip>
         <Bar
           label={{
             formatter: valueFormatter,

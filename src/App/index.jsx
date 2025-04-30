@@ -63,8 +63,8 @@ export default function App() {
 // * remove "degree"
 // * abbreviate "certificate"
 // * different text color on pie charts (white doesn't show well)
-// format numbers
-// add tooltips back
+// * add tooltips back
+// * format numbers
 // wrapping
 // x overflow in scrollable charts
 
