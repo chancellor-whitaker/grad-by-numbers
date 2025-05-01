@@ -41,7 +41,7 @@ export const useVisualizationData = () => {
     });
   };
 
-  return { filteredData: filteredVizData, data: vizData, handleClick };
+  return { filteredData: filteredVizData, onClick: handleClick, data: vizData };
 };
 
 const summarizeData = (data) => {

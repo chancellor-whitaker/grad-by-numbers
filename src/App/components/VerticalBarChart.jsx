@@ -65,26 +65,65 @@ export const VerticalBarChart = ({
   textColor = "white",
   barColor = "green",
   data = defaultData,
+  filteredData = [],
   yAxisStyle = {},
   className = "",
   width = "100%",
+  onClick,
   // height = 250,
 }) => {
+  const object = Object.fromEntries(
+    data.map((element) => [element[categoricalDataKey], { ...element }])
+  );
+
+  const filteredNumericalDataKey = `filtered${
+    numericalDataKey[0].toUpperCase() +
+    numericalDataKey.substring(1).toLowerCase()
+  }`;
+
+  filteredData.forEach(
+    ({ [categoricalDataKey]: name, [numericalDataKey]: value }) =>
+      (object[name][filteredNumericalDataKey] = value)
+  );
+
+  const chartData = Object.values(object);
+
   const fieldFinder = Object.fromEntries(
-    data.map(({ field, name }) => [name, field])
+    chartData.map(({ [categoricalDataKey]: name, field }) => [name, field])
   );
 
   const formatTicks = (name) =>
     tickFormatter(nameFormatter({ field: fieldFinder[name], name }));
 
+  const generateBarProperties = (isFiltered) => {
+    return {
+      label: {
+        fillOpacity: isFiltered ? 1 : 0.25,
+        formatter: valueFormatter,
+        position: "right",
+        fill: textColor,
+      },
+      dataKey: isFiltered ? filteredNumericalDataKey : numericalDataKey,
+      fillOpacity: isFiltered ? 1 : 0.5,
+      fill: barColor,
+      onClick,
+    };
+  };
+
   return (
     <ResponsiveContainer
       className={["small", className].filter((string) => string).join(" ")}
-      height={data.length * 45}
+      height={chartData.length * 45}
       width={width}
     >
-      <BarChart layout="vertical" margin={margin} data={data}>
-        <XAxis dataKey={numericalDataKey} type="number" hide />
+      <BarChart
+        barCategoryGap={0}
+        layout="vertical"
+        barGap={"-100%"}
+        data={chartData}
+        margin={margin}
+      >
+        <XAxis type="number" hide />
         <YAxis
           dataKey={categoricalDataKey}
           tickFormatter={formatTicks}
@@ -94,22 +133,8 @@ export const VerticalBarChart = ({
           tickLine={false}
           type="category"
         />
-        {/* <Tooltip
-          formatter={(value) => [valueFormatter(value), ""]}
-          labelStyle={{ color: "#343a40" }}
-          itemStyle={{ color: "#343a40" }}
-          labelFormatter={tickFormatter}
-          separator=""
-        ></Tooltip> */}
-        <Bar
-          label={{
-            formatter: valueFormatter,
-            position: "right",
-            fill: textColor,
-          }}
-          dataKey={numericalDataKey}
-          fill={barColor}
-        />
+        <Bar {...generateBarProperties()} />
+        <Bar {...generateBarProperties(true)} />
       </BarChart>
     </ResponsiveContainer>
   );

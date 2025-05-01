@@ -23,9 +23,9 @@ export default function App() {
 
   console.log(vizData);
 
-  const { filteredData } = vizData;
+  // const { filteredData } = vizData;
 
-  const blocks = createBlocks({ data: filteredData });
+  const blocks = createBlocks(vizData);
 
   return (
     <main className="container">
@@ -60,25 +60,31 @@ export default function App() {
   );
 }
 
-// * scholar icon not w-100,
-// * masters degree--masters
-// * remove "degree"
-// * abbreviate "certificate"
-// * different text color on pie charts (white doesn't show well)
-// * add tooltips back
+// * shrink scholar icon width
+// * remove "degree" from ticks
+// * abbreviate "certificate" in ticks
+// * make pie chart text readable
 // * format numbers
-// * could shrink Undergrad to UG & Grad to GR
-// * remove pie chart tooltip
-// * could maybe turn tooltips off of bar charts
-// * try to get x axis ticks to stop wrapping (could add margin to both ends of bar charts to prevent tick wrapping)
-// * x overflow in scrollable charts
-// * tick overflow in majors bar chart (maybe using course abbreviations)
-// * make sure pie chart labels are consistent (rect bg)
-// ! make filtering operational again
-// ! wrapping
-// ? might change bg colors of certain rows
+// * could shrink undergraduate & graduate
+// * remove tooltips
+// * make y axis ticks stop wrapping
+// * handle x overflow in scrollable charts
+// * make pie chart labels rects consistent
+// * make bar chart filtering operational again
+// ! make pie chart filtering operational again
+// ! handle responsive wrapping
+// ? try changing block bg color by row
+// ? consider using major codes as an alternative to allowing text wrapping to occur in majors chart
 
-const createBlocks = ({ data }) => {
+const createBlocks = (vizData) => {
+  const { filteredData, onClick, data } = vizData;
+
+  const generateChartProperties = (key) => ({
+    filteredData: filteredData[key].data,
+    data: data[key].data,
+    onClick,
+  });
+
   return {
     awards: (
       <Block>
@@ -88,7 +94,7 @@ const createBlocks = ({ data }) => {
           </>
           <div className="position-relative w-100">
             <VerticalBarChart
-              data={data.awards.data}
+              {...generateChartProperties("awards")}
               {...colorSchemes.maroon}
               margin={{
                 right: 30,
@@ -100,7 +106,7 @@ const createBlocks = ({ data }) => {
             <div className="position-absolute bottom-0 end-0">
               <div>
                 <Metric displayFontSize={2} className="me-3" as="span">
-                  {defaultValueFormatter(data.awards.amount)}
+                  {defaultValueFormatter(filteredData.awards.amount)}
                 </Metric>
                 <span className="display-2 fw-bold">Awards</span>
               </div>
@@ -115,13 +121,13 @@ const createBlocks = ({ data }) => {
           <>
             <Title>Graduates represent</Title>
             <Metric fontSize={fontSizes.tertiary} lineHeight={1}>
-              {defaultValueFormatter(data.countries.amount)} Countries
+              {defaultValueFormatter(filteredData.countries.amount)} Countries
             </Metric>
             <Metric fontSize={fontSizes.tertiary} lineHeight={1}>
-              {defaultValueFormatter(data.states.amount)} States
+              {defaultValueFormatter(filteredData.states.amount)} States
             </Metric>
             <Metric fontSize={fontSizes.tertiary} lineHeight={1}>
-              {defaultValueFormatter(data.counties.amount)} Counties
+              {defaultValueFormatter(filteredData.counties.amount)} Counties
             </Metric>
           </>
           <ImageBackground height={175} className="">
@@ -136,19 +142,19 @@ const createBlocks = ({ data }) => {
           <ImageBackground></ImageBackground>
           <>
             <Title>Average Age</Title>
-            <Metric>{defaultValueFormatter(data.age.average)}</Metric>
+            <Metric>{defaultValueFormatter(filteredData.age.average)}</Metric>
           </>
           <>
             <div>
               Min:{" "}
               <span className="text-white">
-                {defaultValueFormatter(data.age.min)}
+                {defaultValueFormatter(filteredData.age.min)}
               </span>
             </div>
             <div>
               Max:{" "}
               <span className="text-white">
-                {defaultValueFormatter(data.age.max)}
+                {defaultValueFormatter(filteredData.age.max)}
               </span>
             </div>
           </>
@@ -161,7 +167,9 @@ const createBlocks = ({ data }) => {
           <></>
           <>
             <Title>Service Region</Title>
-            <SimplePieChart data={data.serviceReg.data}></SimplePieChart>
+            <SimplePieChart
+              data={filteredData.serviceReg.data}
+            ></SimplePieChart>
           </>
           <>
             <div className="small lh-sm ms-auto mt-auto text-wrap text-end">
@@ -193,7 +201,7 @@ const createBlocks = ({ data }) => {
             }}
             yAxisStyle={{ fontSize: "x-small" }}
             tickFormatter={(value) => value}
-            data={data.majors.data}
+            {...generateChartProperties("majors")}
             {...colorSchemes.darkGray}
           ></VerticalBarChart>
         </ChartScrollContainer>
@@ -213,7 +221,7 @@ const createBlocks = ({ data }) => {
               top: 5,
             }}
             nameFormatter={abbreviateState}
-            data={data.states.data}
+            {...generateChartProperties("states")}
             {...colorSchemes.darkGray}
           ></VerticalBarChart>
         </ChartScrollContainer>
@@ -226,7 +234,7 @@ const createBlocks = ({ data }) => {
         </Title>
         <ChartScrollContainer>
           <VerticalBarChart
-            data={data.counties.data}
+            {...generateChartProperties("counties")}
             {...colorSchemes.darkGray}
           ></VerticalBarChart>
         </ChartScrollContainer>
@@ -238,7 +246,7 @@ const createBlocks = ({ data }) => {
           <ImageBackground>{star}</ImageBackground>
           <>
             <Title>Average Graduation GPA</Title>
-            <Metric>{formatTwoDecimalPlaces(data.gpa.average)}</Metric>
+            <Metric>{formatTwoDecimalPlaces(filteredData.gpa.average)}</Metric>
           </>
           <></>
         </HStack>
@@ -250,7 +258,7 @@ const createBlocks = ({ data }) => {
           <ImageBackground>{donate}</ImageBackground>
           <>
             <Title>Pell Recipients</Title>
-            <Metric>{defaultValueFormatter(data.pell.amount)}</Metric>
+            <Metric>{defaultValueFormatter(filteredData.pell.amount)}</Metric>
           </>
           <></>
         </HStack>
@@ -262,7 +270,7 @@ const createBlocks = ({ data }) => {
           <></>
           <>
             <Title>First Generation</Title>
-            <SimplePieChart data={data.firstGen.data}></SimplePieChart>
+            <SimplePieChart data={filteredData.firstGen.data}></SimplePieChart>
           </>
           <></>
         </HStack>
@@ -277,6 +285,18 @@ const createBlocks = ({ data }) => {
         <KYStatsLink></KYStatsLink>
       </Block>
     ),
+    level: (
+      <Block>
+        <HStack>
+          <></>
+          <>
+            <Title>Level</Title>
+            <SimplePieChart data={filteredData.level.data}></SimplePieChart>
+          </>
+          <></>
+        </HStack>
+      </Block>
+    ),
     salary: (
       <Block textWrap>
         <Title>Median salary 3 years after graduation</Title>
@@ -284,18 +304,6 @@ const createBlocks = ({ data }) => {
           <span className="text-white-50">$</span> 43,875
         </Metric>
         <KYStatsLink></KYStatsLink>
-      </Block>
-    ),
-    level: (
-      <Block>
-        <HStack>
-          <></>
-          <>
-            <Title>Level</Title>
-            <SimplePieChart data={data.level.data}></SimplePieChart>
-          </>
-          <></>
-        </HStack>
       </Block>
     ),
   };
