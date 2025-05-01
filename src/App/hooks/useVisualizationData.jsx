@@ -13,6 +13,8 @@ export const useVisualizationData = () => {
 
   const data = usePromise(promise);
 
+  console.log(data);
+
   const filteredData = noFilterActive
     ? data
     : data.filter(({ [filterBy[0]]: value }) => value === filterBy[1]);

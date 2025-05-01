@@ -1,14 +1,8 @@
-import {
-  ResponsiveContainer,
-  BarChart,
-  Tooltip,
-  XAxis,
-  YAxis,
-  Bar,
-} from "recharts";
+import { ResponsiveContainer, BarChart, XAxis, YAxis, Bar } from "recharts";
 
-import { defaultValueFormatter } from "../utils/defaultValueFormatter";
+import { makeSpacesNonBreaking } from "../utils/makeSpacesNonBreaking";
 import { defaultNameFormatter } from "../utils/defaultNameFormatter";
+import { condenseNumber } from "../utils/condenseNumber";
 
 const defaultData = [
   {
@@ -56,13 +50,22 @@ const defaultData = [
 ];
 
 export const VerticalBarChart = ({
-  valueFormatter = defaultValueFormatter,
+  margin = {
+    right: 30,
+    bottom: 5,
+    left: 30,
+    top: 5,
+  },
+
+  tickFormatter = makeSpacesNonBreaking,
   nameFormatter = defaultNameFormatter,
+  valueFormatter = condenseNumber,
   categoricalDataKey = "name",
   numericalDataKey = "value",
   textColor = "white",
   barColor = "green",
   data = defaultData,
+  yAxisStyle = {},
   className = "",
   width = "100%",
   // height = 250,
@@ -71,8 +74,8 @@ export const VerticalBarChart = ({
     data.map(({ field, name }) => [name, field])
   );
 
-  const tickFormatter = (name) =>
-    nameFormatter({ field: fieldFinder[name], name });
+  const formatTicks = (name) =>
+    tickFormatter(nameFormatter({ field: fieldFinder[name], name }));
 
   return (
     <ResponsiveContainer
@@ -80,23 +83,24 @@ export const VerticalBarChart = ({
       height={data.length * 45}
       width={width}
     >
-      <BarChart layout="vertical" data={data}>
+      <BarChart layout="vertical" margin={margin} data={data}>
         <XAxis dataKey={numericalDataKey} type="number" hide />
         <YAxis
-          tickFormatter={tickFormatter}
           dataKey={categoricalDataKey}
+          tickFormatter={formatTicks}
+          style={{ ...yAxisStyle }}
           stroke={textColor}
           axisLine={false}
           tickLine={false}
           type="category"
         />
-        <Tooltip
+        {/* <Tooltip
           formatter={(value) => [valueFormatter(value), ""]}
           labelStyle={{ color: "#343a40" }}
           itemStyle={{ color: "#343a40" }}
           labelFormatter={tickFormatter}
           separator=""
-        ></Tooltip>
+        ></Tooltip> */}
         <Bar
           label={{
             formatter: valueFormatter,

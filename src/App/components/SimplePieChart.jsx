@@ -38,6 +38,7 @@ const CustomizedLabel = ({
       setBbox({ height, width, x, y });
     }
   }, []);
+
   const formatted = [...formatter(value, name)].reverse().join(" : ");
 
   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
@@ -107,9 +108,9 @@ export const SimplePieChart = ({
       width={width}
     >
       <PieChart>
-        <Tooltip formatter={formatter}></Tooltip>
+        {/* <Tooltip formatter={formatter}></Tooltip> */}
         <Pie
-          label={<CustomizedLabel formatter={formatter} />}
+          label={<CustomizedLabel formatter={formatter} key={Math.random()} />}
           dataKey={numericalDataKey}
           labelLine={false}
           outerRadius={75}

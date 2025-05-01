@@ -12,9 +12,9 @@ export const defaultNameFormatter = ({ field, name }) => {
   }
 
   if (field === "SHRDGMR_LEVL_CODE") {
-    if (name === "GR") return "Graduate";
+    if (name === "GR") return "Grad";
 
-    if (name === "UG") return "Undergraduate";
+    if (name === "UG") return "Undergrad";
   }
 
   if (field === "acat_desc") {

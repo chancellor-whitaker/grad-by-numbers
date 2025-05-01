@@ -5,6 +5,7 @@ import { useVisualizationData } from "./hooks/useVisualizationData";
 import { VerticalBarChart } from "./components/VerticalBarChart";
 import { ImageBackground } from "./components/ImageBackground";
 import { SimplePieChart } from "./components/SimplePieChart";
+import { abbreviateState } from "./utils/abbreviateState";
 import { KYStatsLink } from "./components/KYStatsLink";
 import { colorSchemes } from "./utils/colorSchemes";
 import { fontSizes } from "./utils/fontSizes";
@@ -18,11 +19,13 @@ import globe from "./assets/globe.png";
 import star from "./assets/star.png";
 
 export default function App() {
-  const { filteredData } = useVisualizationData();
+  const vizData = useVisualizationData();
 
-  // console.log(filteredData);
+  console.log(vizData);
 
-  const blocks = createBlocks(filteredData);
+  const { filteredData } = vizData;
+
+  const blocks = createBlocks({ data: filteredData });
 
   return (
     <main className="container">
@@ -57,7 +60,6 @@ export default function App() {
   );
 }
 
-// ? baccalaureate--bachelors
 // * scholar icon not w-100,
 // * masters degree--masters
 // * remove "degree"
@@ -65,16 +67,18 @@ export default function App() {
 // * different text color on pie charts (white doesn't show well)
 // * add tooltips back
 // * format numbers
-// try to get x axis ticks to stop wrapping (could add margin to both ends of bar charts to prevent tick wrapping)
-// wrapping
-// x overflow in scrollable charts
-// fix pie chart labels (added rect bg to labels) (can then remove tooltip on pie charts)
-// could maybe turn tooltips off of bar charts
-// could shrink Undergrad to UG & Grad to GR
-// make filtering operational again
-// might change bg colors of certain rows
+// * could shrink Undergrad to UG & Grad to GR
+// * remove pie chart tooltip
+// * could maybe turn tooltips off of bar charts
+// * try to get x axis ticks to stop wrapping (could add margin to both ends of bar charts to prevent tick wrapping)
+// * x overflow in scrollable charts
+// * tick overflow in majors bar chart (maybe using course abbreviations)
+// * make sure pie chart labels are consistent (rect bg)
+// ! make filtering operational again
+// ! wrapping
+// ? might change bg colors of certain rows
 
-const createBlocks = (data) => {
+const createBlocks = ({ data }) => {
   return {
     awards: (
       <Block>
@@ -86,6 +90,12 @@ const createBlocks = (data) => {
             <VerticalBarChart
               data={data.awards.data}
               {...colorSchemes.maroon}
+              margin={{
+                right: 30,
+                bottom: 5,
+                left: 60,
+                top: 5,
+              }}
             ></VerticalBarChart>
             <div className="position-absolute bottom-0 end-0">
               <div>
@@ -168,19 +178,6 @@ const createBlocks = (data) => {
         </HStack>
       </Block>
     ),
-    counties: (
-      <Block backgroundColor="lightgray" color="secondary">
-        <Title fontSize={fontSizes.tertiary} textAlign="start">
-          KY Counties
-        </Title>
-        <ChartScrollContainer>
-          <VerticalBarChart
-            data={data.counties.data}
-            {...colorSchemes.darkGray}
-          ></VerticalBarChart>
-        </ChartScrollContainer>
-      </Block>
-    ),
     majors: (
       <Block backgroundColor="lightgray" color="secondary">
         <Title fontSize={fontSizes.tertiary} textAlign="start">
@@ -188,6 +185,14 @@ const createBlocks = (data) => {
         </Title>
         <ChartScrollContainer>
           <VerticalBarChart
+            margin={{
+              right: 30,
+              bottom: 5,
+              left: 40,
+              top: 5,
+            }}
+            yAxisStyle={{ fontSize: "x-small" }}
+            tickFormatter={(value) => value}
             data={data.majors.data}
             {...colorSchemes.darkGray}
           ></VerticalBarChart>
@@ -201,7 +206,27 @@ const createBlocks = (data) => {
         </Title>
         <ChartScrollContainer>
           <VerticalBarChart
+            margin={{
+              right: 30,
+              bottom: 5,
+              left: -20,
+              top: 5,
+            }}
+            nameFormatter={abbreviateState}
             data={data.states.data}
+            {...colorSchemes.darkGray}
+          ></VerticalBarChart>
+        </ChartScrollContainer>
+      </Block>
+    ),
+    counties: (
+      <Block backgroundColor="lightgray" color="secondary">
+        <Title fontSize={fontSizes.tertiary} textAlign="start">
+          KY Counties
+        </Title>
+        <ChartScrollContainer>
+          <VerticalBarChart
+            data={data.counties.data}
             {...colorSchemes.darkGray}
           ></VerticalBarChart>
         </ChartScrollContainer>
