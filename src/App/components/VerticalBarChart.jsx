@@ -1,8 +1,8 @@
 import { ResponsiveContainer, BarChart, XAxis, YAxis, Bar } from "recharts";
 
 import { makeSpacesNonBreaking } from "../utils/makeSpacesNonBreaking";
+import { defaultValueFormatter } from "../utils/defaultValueFormatter";
 import { defaultNameFormatter } from "../utils/defaultNameFormatter";
-import { condenseNumber } from "../utils/condenseNumber";
 
 const defaultData = [
   {
@@ -51,15 +51,15 @@ const defaultData = [
 
 export const VerticalBarChart = ({
   margin = {
-    right: 30,
+    right: 40,
     bottom: 5,
     left: 30,
     top: 5,
   },
 
+  valueFormatter = defaultValueFormatter,
   tickFormatter = makeSpacesNonBreaking,
   nameFormatter = defaultNameFormatter,
-  valueFormatter = condenseNumber,
   categoricalDataKey = "name",
   numericalDataKey = "value",
   textColor = "white",
@@ -98,7 +98,7 @@ export const VerticalBarChart = ({
   const generateBarProperties = (isFiltered) => {
     return {
       label: {
-        fillOpacity: isFiltered ? 1 : 0.25,
+        fillOpacity: isFiltered ? 1 : 0,
         formatter: valueFormatter,
         position: "right",
         fill: textColor,

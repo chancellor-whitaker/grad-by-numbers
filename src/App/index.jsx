@@ -97,7 +97,7 @@ const createBlocks = (vizData) => {
               {...generateChartProperties("awards")}
               {...colorSchemes.maroon}
               margin={{
-                right: 30,
+                right: 40,
                 bottom: 5,
                 left: 60,
                 top: 5,
@@ -194,7 +194,7 @@ const createBlocks = (vizData) => {
         <ChartScrollContainer>
           <VerticalBarChart
             margin={{
-              right: 30,
+              right: 40,
               bottom: 5,
               left: 40,
               top: 5,
@@ -215,7 +215,7 @@ const createBlocks = (vizData) => {
         <ChartScrollContainer>
           <VerticalBarChart
             margin={{
-              right: 30,
+              right: 40,
               bottom: 5,
               left: -20,
               top: 5,
