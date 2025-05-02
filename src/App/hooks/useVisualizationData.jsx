@@ -13,7 +13,7 @@ export const useVisualizationData = () => {
 
   const data = usePromise(promise);
 
-  console.log(data);
+  // console.log(data);
 
   const filteredData = noFilterActive
     ? data

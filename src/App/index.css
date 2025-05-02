@@ -1,14 +1,6 @@
-body {
-  background-color: rgb(43, 48, 53);
-}
-
 .recharts-wrapper svg {
   overflow: visible;
 }
-
-/* .flex-row > div {
-  width: 100%;
-} */
 
 .bg-maroon {
   background-color: #861f41 !important;

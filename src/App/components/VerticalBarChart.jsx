@@ -3,6 +3,7 @@ import { ResponsiveContainer, BarChart, XAxis, YAxis, Bar } from "recharts";
 import { makeSpacesNonBreaking } from "../utils/makeSpacesNonBreaking";
 import { defaultValueFormatter } from "../utils/defaultValueFormatter";
 import { defaultNameFormatter } from "../utils/defaultNameFormatter";
+import { combineData } from "../utils/combineData";
 
 const defaultData = [
   {
@@ -72,21 +73,12 @@ export const VerticalBarChart = ({
   onClick,
   // height = 250,
 }) => {
-  const object = Object.fromEntries(
-    data.map((element) => [element[categoricalDataKey], { ...element }])
-  );
-
-  const filteredNumericalDataKey = `filtered${
-    numericalDataKey[0].toUpperCase() +
-    numericalDataKey.substring(1).toLowerCase()
-  }`;
-
-  filteredData.forEach(
-    ({ [categoricalDataKey]: name, [numericalDataKey]: value }) =>
-      (object[name][filteredNumericalDataKey] = value)
-  );
-
-  const chartData = Object.values(object);
+  const { filteredNumericalDataKey, chartData } = combineData({
+    categoricalDataKey,
+    numericalDataKey,
+    filteredData,
+    data,
+  });
 
   const fieldFinder = Object.fromEntries(
     chartData.map(({ [categoricalDataKey]: name, field }) => [name, field])

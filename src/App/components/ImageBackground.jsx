@@ -1,4 +1,3 @@
-// import { imageWidths } from "../utils/imageWidths";
 import scholar from "../assets/scholar.png";
 import donate from "../assets/donate.png";
 import globe from "../assets/globe.png";

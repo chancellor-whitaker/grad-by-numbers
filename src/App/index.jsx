@@ -17,13 +17,10 @@ import { Title } from "./components/Title";
 import donate from "./assets/donate.png";
 import globe from "./assets/globe.png";
 import star from "./assets/star.png";
+import "./index.css";
 
 export default function App() {
   const vizData = useVisualizationData();
-
-  console.log(vizData);
-
-  // const { filteredData } = vizData;
 
   const blocks = createBlocks(vizData);
 
@@ -71,10 +68,9 @@ export default function App() {
 // * handle x overflow in scrollable charts
 // * make pie chart labels rects consistent
 // * make bar chart filtering operational again
-// ! make pie chart filtering operational again
+// * make pie chart filtering operational again
 // ! handle responsive wrapping
 // ? try changing block bg color by row
-// ? consider using major codes as an alternative to allowing text wrapping to occur in majors chart
 
 const createBlocks = (vizData) => {
   const { filteredData, onClick, data } = vizData;
@@ -136,6 +132,31 @@ const createBlocks = (vizData) => {
         </HStack>
       </Block>
     ),
+    serviceReg: (
+      <Block>
+        <HStack>
+          <></>
+          <>
+            <Title>Service Region</Title>
+            <SimplePieChart
+              {...generateChartProperties("serviceReg")}
+            ></SimplePieChart>
+          </>
+          <>
+            <div className="small lh-sm ms-auto mt-auto text-wrap text-end">
+              <a
+                href="https://www.irserver2.eku.edu/reports/serviceregion/"
+                className="link-light"
+                rel="noreferrer"
+                target="_blank"
+              >
+                EKU Service Region
+              </a>
+            </div>
+          </>
+        </HStack>
+      </Block>
+    ),
     age: (
       <Block>
         <HStack>
@@ -156,31 +177,6 @@ const createBlocks = (vizData) => {
               <span className="text-white">
                 {defaultValueFormatter(filteredData.age.max)}
               </span>
-            </div>
-          </>
-        </HStack>
-      </Block>
-    ),
-    serviceReg: (
-      <Block>
-        <HStack>
-          <></>
-          <>
-            <Title>Service Region</Title>
-            <SimplePieChart
-              data={filteredData.serviceReg.data}
-            ></SimplePieChart>
-          </>
-          <>
-            <div className="small lh-sm ms-auto mt-auto text-wrap text-end">
-              <a
-                href="https://www.irserver2.eku.edu/reports/serviceregion/"
-                className="link-light"
-                rel="noreferrer"
-                target="_blank"
-              >
-                EKU Service Region
-              </a>
             </div>
           </>
         </HStack>
@@ -252,6 +248,20 @@ const createBlocks = (vizData) => {
         </HStack>
       </Block>
     ),
+    firstGen: (
+      <Block>
+        <HStack>
+          <></>
+          <>
+            <Title>First Generation</Title>
+            <SimplePieChart
+              {...generateChartProperties("firstGen")}
+            ></SimplePieChart>
+          </>
+          <></>
+        </HStack>
+      </Block>
+    ),
     pell: (
       <Block>
         <HStack>
@@ -264,13 +274,15 @@ const createBlocks = (vizData) => {
         </HStack>
       </Block>
     ),
-    firstGen: (
+    level: (
       <Block>
         <HStack>
           <></>
           <>
-            <Title>First Generation</Title>
-            <SimplePieChart data={filteredData.firstGen.data}></SimplePieChart>
+            <Title>Level</Title>
+            <SimplePieChart
+              {...generateChartProperties("level")}
+            ></SimplePieChart>
           </>
           <></>
         </HStack>
@@ -283,18 +295,6 @@ const createBlocks = (vizData) => {
           62.5 <span className="text-white-50">%</span>
         </Metric>
         <KYStatsLink></KYStatsLink>
-      </Block>
-    ),
-    level: (
-      <Block>
-        <HStack>
-          <></>
-          <>
-            <Title>Level</Title>
-            <SimplePieChart data={filteredData.level.data}></SimplePieChart>
-          </>
-          <></>
-        </HStack>
       </Block>
     ),
     salary: (
