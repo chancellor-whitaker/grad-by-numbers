@@ -12,7 +12,7 @@ export const Block = ({
   return (
     <VStack
       className={[
-        `bg-${backgroundColor} text-${color} rounded-${rounded} shadow-${shadow} px-3 py-1`,
+        `bg-${backgroundColor} text-${color} rounded-${rounded} shadow-${shadow} px-3 py-2`,
         textWrap ? "text-wrap" : "text-nowrap",
         className,
       ]

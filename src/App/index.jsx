@@ -5,55 +5,73 @@ import { useVisualizationData } from "./hooks/useVisualizationData";
 import { VerticalBarChart } from "./components/VerticalBarChart";
 import { ImageBackground } from "./components/ImageBackground";
 import { SimplePieChart } from "./components/SimplePieChart";
+import { WidthProvider } from "./WidthContext/WidthProvider";
 import { abbreviateState } from "./utils/abbreviateState";
 import { KYStatsLink } from "./components/KYStatsLink";
 import { colorSchemes } from "./utils/colorSchemes";
+import { useWidth } from "./WidthContext/useWidth";
 import { fontSizes } from "./utils/fontSizes";
 import { HStack } from "./components/HStack";
 import { Metric } from "./components/Metric";
 import { VStack } from "./components/VStack";
 import { Block } from "./components/Block";
 import { Title } from "./components/Title";
+import "./index.css";
 import donate from "./assets/donate.png";
 import globe from "./assets/globe.png";
 import star from "./assets/star.png";
-import "./index.css";
 
 export default function App() {
+  return (
+    <WidthProvider>
+      <Content></Content>
+    </WidthProvider>
+  );
+}
+
+function Content() {
+  const width = useWidth();
+
+  const shouldWrap = width < 992;
+
+  const rowClassName = shouldWrap ? "flex-wrap" : "";
+
   const vizData = useVisualizationData();
 
   const blocks = createBlocks(vizData);
 
   return (
-    <main className="container">
-      <div className="my-3">
-        <div className="bd-example-flex">
-          <VStack>
-            <HStack>{blocks.awards}</HStack>
-            <HStack>
-              {blocks.level}
-              {blocks.firstGen}
-              {blocks.serviceReg}
-            </HStack>
-            <HStack>
-              {blocks.gpa}
-              {blocks.pell}
-              {blocks.age}
-            </HStack>
-            <HStack>
-              {blocks.states}
-              {blocks.counties}
-              {blocks.majors}
-            </HStack>
-            <HStack>
-              {blocks.locations}
-              {blocks.work}
-              {blocks.salary}
-            </HStack>
-          </VStack>
+    <>
+      <main className="container">
+        <div className="my-3">
+          <div className="bd-example-flex">
+            <VStack>
+              <HStack>{blocks.awards}</HStack>
+              <HStack className={rowClassName}>
+                {blocks.level}
+                {blocks.firstGen}
+                {blocks.serviceReg}
+              </HStack>
+              <HStack className={rowClassName}>
+                {blocks.gpa}
+                {blocks.pell}
+                {blocks.age}
+              </HStack>
+              <HStack className={rowClassName}>
+                {blocks.states}
+                {blocks.counties}
+                {blocks.majors}
+              </HStack>
+              <HStack className={rowClassName}>
+                {blocks.locations}
+                {blocks.work}
+                {blocks.salary}
+              </HStack>
+            </VStack>
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </>
   );
 }
 

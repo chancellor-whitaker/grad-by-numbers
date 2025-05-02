@@ -54,8 +54,6 @@ export const SimplePieChart = ({
     onClick,
   };
 
-  console.log(chartData);
-
   return (
     <ResponsiveContainer
       className={["small", className].filter((string) => string).join(" ")}
