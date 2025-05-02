@@ -38,7 +38,7 @@ function Content() {
 
   const vizData = useVisualizationData();
 
-  const blocks = createBlocks(vizData);
+  const blocks = createBlocks({ ...vizData, width });
 
   return (
     <>
@@ -99,6 +99,8 @@ const createBlocks = (vizData) => {
     onClick,
   });
 
+  const shouldWrap = vizData.width < 992;
+
   return {
     awards: (
       <Block>
@@ -119,10 +121,17 @@ const createBlocks = (vizData) => {
             ></VerticalBarChart>
             <div className="position-absolute bottom-0 end-0">
               <div>
-                <Metric displayFontSize={2} className="me-3" as="span">
+                <Metric
+                  className={`me-${shouldWrap ? 0 : 3}`}
+                  displayFontSize={shouldWrap ? 5 : 3}
+                  as={shouldWrap ? "div" : "span"}
+                  textAlign="end"
+                >
                   {defaultValueFormatter(filteredData.awards.amount)}
                 </Metric>
-                <span className="display-2 fw-bold">Awards</span>
+                <span className={`display-${shouldWrap ? 5 : 3} fw-bold`}>
+                  Awards
+                </span>
               </div>
             </div>
           </div>
