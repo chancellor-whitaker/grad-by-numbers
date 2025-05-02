@@ -101,12 +101,16 @@ const createBlocks = (vizData) => {
 
   const shouldWrap = vizData.width < 992;
 
+  const shouldRemoveImg = vizData.width < 576;
+
   return {
     awards: (
       <Block>
         <HStack columnWidths={"auto"}>
           <>
-            <ImageBackground height={200} className=""></ImageBackground>
+            {!shouldRemoveImg && (
+              <ImageBackground height={200} className=""></ImageBackground>
+            )}
           </>
           <div className="position-relative w-100">
             <VerticalBarChart
@@ -115,7 +119,7 @@ const createBlocks = (vizData) => {
               margin={{
                 right: 40,
                 bottom: 5,
-                left: 60,
+                left: 75,
                 top: 5,
               }}
             ></VerticalBarChart>
