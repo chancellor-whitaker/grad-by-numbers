@@ -41,37 +41,31 @@ function Content() {
   const blocks = createBlocks({ ...vizData, width });
 
   return (
-    <>
-      <main className="container">
-        <div className="my-3">
-          <div className="bd-example-flex">
-            <VStack>
-              <HStack>{blocks.awards}</HStack>
-              <HStack className={rowClassName}>
-                {blocks.level}
-                {blocks.firstGen}
-                {blocks.serviceReg}
-              </HStack>
-              <HStack className={rowClassName}>
-                {blocks.gpa}
-                {blocks.pell}
-                {blocks.age}
-              </HStack>
-              <HStack className={rowClassName}>
-                {blocks.states}
-                {blocks.counties}
-                {blocks.majors}
-              </HStack>
-              <HStack className={rowClassName}>
-                {blocks.locations}
-                {blocks.work}
-                {blocks.salary}
-              </HStack>
-            </VStack>
-          </div>
-        </div>
-      </main>
-    </>
+    <div>
+      <VStack>
+        <HStack>{blocks.awards}</HStack>
+        <HStack className={rowClassName}>
+          {blocks.level}
+          {blocks.firstGen}
+          {blocks.serviceReg}
+        </HStack>
+        <HStack className={rowClassName}>
+          {blocks.gpa}
+          {blocks.pell}
+          {blocks.age}
+        </HStack>
+        <HStack className={rowClassName}>
+          {blocks.states}
+          {blocks.counties}
+          {blocks.majors}
+        </HStack>
+        <HStack className={rowClassName}>
+          {blocks.locations}
+          {blocks.work}
+          {blocks.salary}
+        </HStack>
+      </VStack>
+    </div>
   );
 }
 
